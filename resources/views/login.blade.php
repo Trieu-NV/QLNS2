@@ -27,7 +27,7 @@
                 </div>
                 <div class="login-pass login-info">
                     <label for="password">Mật Khẩu</label>
-                    <input type="password" value="123" name="password" id="password" placeholder="Nhập mật khẩu" required>
+                    <input type="password" value="123456" name="password" id="password" placeholder="Nhập mật khẩu" required>
                 </div>
                 <div class="show-password">
                     <input type="checkbox" id="showPassword">

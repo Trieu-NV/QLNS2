@@ -21,6 +21,12 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
+
+        $middleware->alias([
+            'check.username.cookie' => \App\Http\Middleware\CheckUsernameCookie::class,
+        ]);
+
+      
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

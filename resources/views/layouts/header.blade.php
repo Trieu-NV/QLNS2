@@ -10,11 +10,11 @@
         </div>
         <div class="dropdown">
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{{ route('user.profile') }}">Thông Tin Cá Nhân</a></li>
-                <li><a class="dropdown-item" href="{{ route('user.change-password') }}">Đổi Mật Khẩu</a></li>
+                <li><a class="dropdown-item" href="">Thông Tin Cá Nhân</a></li>
+                <li><a class="dropdown-item" href="">Đổi Mật Khẩu</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="">
                         @csrf
                         <button type="submit" class="dropdown-item">Đăng Xuất</button>
                     </form>

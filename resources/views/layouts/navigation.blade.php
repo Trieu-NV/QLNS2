@@ -5,9 +5,6 @@
             <img class="logo" src="/storage/logo.png" alt="Logo" class="logo">
             <h1 class="h1" style="white-space: nowrap;">HẢI VÂN</h1>
         </a>
-
-
-
     </div>
     <ul class="nav-list">
         <li class="nav-item {{ request()->routeIs('home.*') ? 'active' : '' }}" data-tooltip="Dashboard">
@@ -88,8 +85,8 @@
             </a>
         </li>
         <!--  -->
-        <li class="nav-item {{ request()->routeIs('users.*') ? 'active' : '' }}" data-tooltip="Tài Khoản">
-            <a class="nav-link " href="{{ route('users.index') }}">
+        <li class="nav-item " data-tooltip="Tài Khoản">
+            <a class="nav-link " href="">
                 <i class="fa-solid fa-user" style="color:var(--nav-font-color);"></i>
                 <span>Tài Khoản</span>
             </a>

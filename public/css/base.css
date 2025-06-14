@@ -368,3 +368,10 @@ table thead th {
     background-color: var(--background-color-hover);
     font-weight: bold;
 }
+.avt{
+    object-fit: cover;
+    min-width: 60px;
+    max-width: 60px;
+    min-height: 80px;
+    max-height: 80px;
+}

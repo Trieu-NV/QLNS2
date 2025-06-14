@@ -8,60 +8,85 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+
 class ChuyenCanController extends Controller
 {
     public function index(Request $request)
     {
-        $currentMonth = $request->input('month', Carbon::now()->month);
-        $currentYear = $request->input('year', Carbon::now()->year);
+        $selectedMonth = $request->input('month', Carbon::now()->month);
+        $selectedYear = $request->input('year', Carbon::now()->year);
 
-        // Logic to fetch and process data will be added here
-        $chuyenCanData = []; // Placeholder for data
+        $chuyenCanData = [];
+        $nhanSuList = NhanSu::where('trang_thai', 1)->with('phongBan')->get(); // Only active employees
 
-        // Example: Fetch all NhanSu for now, will refine later
-        $nhanSuList = NhanSu::with('phongBan')->get();
+        // Define holidays (example, should be configurable or fetched from a source)
+        $holidays = [
+            // Format: 'Y-m-d'
+            // Example: $selectedYear . '-01-01', // New Year
+            // $selectedYear . '-04-30', // Liberation Day
+            // $selectedYear . '-05-01', // International Workers' Day
+            // $selectedYear . '-09-02', // National Day
+        ];
 
         foreach ($nhanSuList as $nhanSu) {
-            // Calculate SoCong, TienThuong, TienPhat for each nhanSu
-            // This is a simplified version, actual calculation will be more complex
-            $soCong = 0; // Placeholder
-            $tienThuong = 0; // Placeholder
-            $tienPhat = 0; // Placeholder
+            $firstDayOfMonth = Carbon::create($selectedYear, $selectedMonth, 1);
+            $daysInMonth = $firstDayOfMonth->daysInMonth;
+            $soNgayCongChuan = 0;
 
-            // Example: Get attendance for the current month and year for this employee
+            for ($day = 1; $day <= $daysInMonth; $day++) {
+                $currentDate = Carbon::create($selectedYear, $selectedMonth, $day);
+                // Check if it's a Sunday (dayOfWeek == 0) or a holiday
+                if ($currentDate->dayOfWeek != Carbon::SUNDAY && !in_array($currentDate->toDateString(), $holidays)) {
+                    $soNgayCongChuan++;
+                }
+            }
+
             $attendances = ChamCong::where('ma_nv', $nhanSu->ma_nv)
-                                ->whereYear('ngay', $currentYear)
-                                ->whereMonth('ngay', $currentMonth)
+                                ->whereYear('ngay', $selectedYear)
+                                ->whereMonth('ngay', $selectedMonth)
                                 ->get();
 
-            $soNgayDiLam = $attendances->whereIn('trang_thai', ['Đi làm', 'Phép'])->count();
-            // Assuming 'Phép' also counts as a working day for bonus/penalty calculation
+            $soNgayDiLam = (int)$attendances->where('trang_thai', 'Đi Làm')->count();
+            $soNgayNghi = (int)$attendances->where('trang_thai', 'Nghỉ')->count();
+            $soNgayPhep = (int)$attendances->where('trang_thai', 'Phép')->count();
 
-            $soCong = $soNgayDiLam;
-
-            if ($soCong > 22) {
+            $tienThuong = 0;
+            
+            if ($soNgayNghi == 0 && $soNgayPhep <= 1 && ($soNgayDiLam + $soNgayPhep) == $soNgayCongChuan) {
                 $tienThuong = 500000;
             }
 
-            // Example penalty: if working days < 15, penalty of 200,000 VND
-            // This threshold can be adjusted
-            if ($soCong < 15 && $soCong > 0) { // Avoid penalty if 0 days (e.g. new employee mid-month)
-                $tienPhat = 200000;
-            }
+            // Store or update ChuyenCan record
+            $tienPhat = $soNgayNghi * 50000;
 
+            $chuyenCanEntry = \App\Models\ChuyenCan::firstOrNew(
+                ['ma_nv' => $nhanSu->ma_nv, 'thang_nam' => $firstDayOfMonth->format('Y-m-01')],
+
+
+            );
+
+            $chuyenCanEntry->so_cong_chuan = $soNgayCongChuan;
+            $chuyenCanEntry->so_ngay_di_lam = $soNgayDiLam;
+            $chuyenCanEntry->so_ngay_nghi = $soNgayNghi;
+            $chuyenCanEntry->so_ngay_phep = $soNgayPhep;
+            $chuyenCanEntry->tien_thuong = $tienThuong;
+            $chuyenCanEntry->tien_phat = $tienPhat;
+            $chuyenCanEntry->save();
 
             $chuyenCanData[] = [
                 'ma_nv' => $nhanSu->ma_nv,
                 'ho_ten' => $nhanSu->ho_ten,
                 'ten_phong_ban' => $nhanSu->phongBan ? $nhanSu->phongBan->ten_phong_ban : 'N/A',
-                'thang' => $currentMonth,
-                'nam' => $currentYear,
-                'so_cong' => $soCong,
+                'thang_nam' => $firstDayOfMonth->format('m/Y'),
+                'so_cong_chuan' => $soNgayCongChuan,
+                'so_ngay_di_lam' => $soNgayDiLam,
+                'so_ngay_nghi' => $soNgayNghi,
+                'so_ngay_phep' => $soNgayPhep,
                 'tien_thuong' => $tienThuong,
                 'tien_phat' => $tienPhat,
             ];
         }
 
-        return view('chuyen-can.index', compact('chuyenCanData', 'currentMonth', 'currentYear'));
+        return view('chuyen-can.index', compact('chuyenCanData', 'selectedMonth', 'selectedYear'));
     }
 }

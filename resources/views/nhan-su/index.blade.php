@@ -148,11 +148,12 @@
                             <td>{{ $item->ho_ten }}</td>
                             <td>
                                 @if($item->hinh_anh)
-                                    <img src="{{ asset('storage/' . $item->hinh_anh) }}" alt="Avatar" class="avatar">
-                                @else
-                                    <div class="avatar bg-secondary d-flex align-items-center justify-content-center">
+                                    <img class="avt" src="{{ asset('storage/' . $item->hinh_anh) }}" alt="Avatar" class="avatar">
+                                    <!-- <div class="avatar bg-secondary d-flex align-items-center justify-content-center">
                                         <i class="fas fa-user text-white"></i>
-                                    </div>
+                                    </div> -->
+                                @else
+                                    <img class="avt" src="{{ asset('storage/avtdf.png') }}" alt="Avatar" class="avatar">
                                 @endif
                             </td>
                             <td>

@@ -6,7 +6,7 @@
             <i class="fa-solid fa-moon" style="display:none;"></i>
         </button>
         <div class="acc__avatar">
-            <i class="fa-solid fa-circle-user"></i>
+            <i class="fa-solid fa-circle-user d-flex align-items-center justify-content-center"></i>
         </div>
         <div class="dropdown">
             <ul class="dropdown-menu">

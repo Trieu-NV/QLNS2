@@ -7,7 +7,7 @@
         <h1>Bảng Lương Nhân Viên</h1>
 
         <form action="{{ route('luong.report') }}" method="GET" class="mb-4">
-            <div class="form-row">
+            <div class="form-row d-flex gap-3">
                 <div class="col-md-3">
                     <label for="month">Tháng:</label>
                     <input type="number" id="month" name="month" class="form-control" value="{{ $month }}" min="1" max="12">
@@ -18,6 +18,9 @@
                 </div>
                 <div class="col-md-3 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary">Xem Báo Cáo</button>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <a href="{{ route('luong.export', ['month' => $month, 'year' => $year]) }}" class="btn btn-success">Xuất Excel</a>
                 </div>
             </div>
         </form>

@@ -9,6 +9,8 @@ use App\Models\HopDong;
 use App\Models\PhuCap;
 use App\Models\ChamCong;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SalaryExport;
 
 class LuongController extends Controller
 {
@@ -57,5 +59,13 @@ class LuongController extends Controller
         }
 
         return view('luong', compact('salaryData', 'month', 'year'));
+    }
+
+    public function export(Request $request)
+    {
+        $month = $request->input('month', Carbon::now()->month);
+        $year = $request->input('year', Carbon::now()->year);
+
+        return Excel::download(new SalaryExport($month, $year), 'bang_luong_' . $month . '_' . $year . '.xlsx');
     }
 }

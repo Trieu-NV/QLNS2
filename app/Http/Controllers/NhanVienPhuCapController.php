@@ -34,7 +34,7 @@ class NhanVienPhuCapController extends Controller
      */
     public function create()
     {
-        $nhanSus = NhanSu::all();
+        $nhanSus = NhanSu::where('trang_thai', true)->get();
         $phuCaps = PhuCap::all();
         return view('phu-cap.nhan-vien.create', compact('nhanSus', 'phuCaps'));
     }

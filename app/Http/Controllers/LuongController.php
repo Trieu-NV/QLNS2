@@ -25,7 +25,7 @@ class LuongController extends Controller
         $salaryData = [];
         foreach ($employees as $employee) {
             $basicSalary = $employee->hopDong->luong ?? 0;
-            $totalAllowance = $employee->phuCap->sum('so_tien');
+            $totalAllowance = $employee->phuCap->sum('so-tien');
 
             // Calculate days off for the month/year
             $daysOff = ChamCong::where('ma_nv', $employee->ma_nv)

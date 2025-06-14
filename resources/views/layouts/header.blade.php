@@ -6,20 +6,20 @@
             <i class="fa-solid fa-moon" style="display:none;"></i>
         </button>
         <div class="acc__avatar">
-            <!-- <i class="fa-solid fa-circle-user"></i> -->
-            <img src="/storage/avatar.png" alt="Avatar" class="avatar__img">
+            <i class="fa-solid fa-circle-user"></i>
         </div>
         <div class="dropdown">
-            <h6 class="acc__name dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Nguyễn Văn Triệu</h2>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{route('user')}}">Thông Tin Cá Nhân</a></li>
-                    <li><a class="dropdown-item" href="{{route('user.edit')}}">Đổi Mật Khẩu</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                
-                    <li><a class="dropdown-item"href="{{ route('login') }}">Đăng Xuất</a></li>
-                </ul>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ route('user.profile') }}">Thông Tin Cá Nhân</a></li>
+                <li><a class="dropdown-item" href="{{ route('user.change-password') }}">Đổi Mật Khẩu</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="dropdown-item">Đăng Xuất</button>
+                    </form>
+                </li>
+            </ul>
         </div>
 
     </div>

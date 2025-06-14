@@ -12,16 +12,17 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $table = 'users';
+    protected $primaryKey = 'username';
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
-        'name',
+        'username',
+        'password',
+        'info',
         'email',
-        'workos_id',
-        'avatar',
+        'sdt',
+        'loaitk'
     ];
 
     /**
@@ -30,7 +31,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'workos_id',
+        'password',
         'remember_token',
     ];
 
@@ -45,5 +46,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Find the user by the given username for authentication.
+     *
+     * @param  string  $username
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function findForAuth($username)
+    {
+        return $this->where('username', $username)->first();
     }
 }

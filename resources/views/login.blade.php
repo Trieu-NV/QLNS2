@@ -19,7 +19,7 @@
     <div class="login-wrapper container-fluid d-flex justify-content-center align-items-center vh-100">
         <div class="login-box">
             <h1 class="text-center h1">Đăng Nhập</h1>
-            <form action="" method="POST" class="login-form">
+            <form action="{{route('login.post')}}" method="POST" class="login-form">
                 @csrf
                 <div class="login-acc login-info">
                     <label for="username">Tài Khoản</label>

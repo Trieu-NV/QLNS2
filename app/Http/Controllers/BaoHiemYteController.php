@@ -102,14 +102,10 @@ class BaoHiemYteController extends Controller
 
         return redirect()->route('bao-hiem-yte.index')->with('success', 'Cập nhật bảo hiểm y tế thành công!');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
+ 
     public function destroy(BaoHiemYte $baoHiemYte)
     {
         $baoHiemYte->delete();
-
         return redirect()->route('bao-hiem-yte.index')->with('success', 'Xóa bảo hiểm y tế thành công!');
     }
 }

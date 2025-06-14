@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('username')->unique()->primary(); // Changed from name, and made unique
             $table->string('password');
+            $table->tinyInteger('loaitk')->default(2); // 0: admin, 1: quản lý, 2: người dùng
+            $table->string('email')->unique();
+            $table->string('sdt')->nullable(); // Số điện thoại
+            $table->string('info')->nullable(); // Họ tên
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

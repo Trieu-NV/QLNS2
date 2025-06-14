@@ -9,7 +9,6 @@
             {{ session('success') }}
         </div>
     @endif
-
     <form method="GET" action="{{ route('cham-cong.index') }}" class="mb-4">
         <div class="row">
             <div class="col-md-4">
@@ -180,12 +179,7 @@
                         // Update the table row with new data
                         $('#trang_thai_' + chamCongId).html('<span >' + response.trang_thai + '</span>');
                         $('#ghi_chu_' + chamCongId).text(response.ghi_chu);
-
-                        // Close the modal
                         form.closest('.modal').modal('hide');
-
-                        // Optionally, show a success message
-                        // alert(response.message);
                     } else {
                         alert('Error: ' + response.message);
                     }

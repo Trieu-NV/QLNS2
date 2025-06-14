@@ -81,8 +81,15 @@
             </a>
         </li>
         <!--  -->
-        <li class="nav-item {{ request()->routeIs('taikhoan.*') ? 'active' : '' }}" data-tooltip="Tài Khoản">
-            <a class="nav-link " href="{{ route('taikhoan.index') }}">
+        <li class="nav-item {{ request()->routeIs('chuyen-can.*') ? 'active' : '' }} " data-tooltip="Chuyên Cần">
+            <a class="nav-link " href="{{ route('chuyen-can.index') }}">
+                <i class="fa-solid fa-star" style="color:var(--nav-font-color);"></i> <!-- Example icon, change as needed -->
+                <span>Chuyên Cần</span>
+            </a>
+        </li>
+        <!--  -->
+        <li class="nav-item {{ request()->routeIs('users.*') ? 'active' : '' }}" data-tooltip="Tài Khoản">
+            <a class="nav-link " href="{{ route('users.index') }}">
                 <i class="fa-solid fa-user" style="color:var(--nav-font-color);"></i>
                 <span>Tài Khoản</span>
             </a>

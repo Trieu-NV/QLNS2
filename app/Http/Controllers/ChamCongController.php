@@ -17,7 +17,7 @@ class ChamCongController extends Controller
     {
         $today = now()->toDateString();
         
-        // $today = '2025-06-12';
+        // $today = '2025-06-15';
         $phongBans = PhongBan::all();
 
         // Tạo bản ghi chấm công cho nhân viên nếu chưa có cho ngày hôm nay

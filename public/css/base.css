@@ -1,0 +1,370 @@
+:root {
+    /* Light Mode Colors */
+    --text-light: #000000;
+    --background-color-light: #ffffff;
+    --background-color-hover-light: #f8f9fa;
+    --nav-background-light: #101828; /* Giữ nguyên màu nav cho cả 2 chế độ */
+    --nav-background-hover-light: #9b9a9a; /* Giữ nguyên màu nav hover cho cả 2 chế độ */
+    --primary-color-light: #007bff;
+    --secondary-color-light: #6c757d;
+    --success-color-light: #28a745;
+    --danger-color-light: #dc3545;
+    --warning-color-light: #ffc107;
+    --info-color-light: #17a2b8;
+    --light-color-light: #f8f9fa;
+    --dark-color-light: #343a40;
+    --card-background-light: #ffffff;
+    --border-color-light: #dee2e6;
+    --font-color-light: #000000;
+    --nav-font-color-light: #ffffff; /* Giữ nguyên màu chữ nav cho cả 2 chế độ */
+    --box-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    /* Dark Mode Colors */
+    --text-dark: #ffffff;
+    --background-color-dark: #1a1a1a;
+    --background-color-hover-dark: #2d2d2d;
+    --nav-background-dark: #101828; /* Giữ nguyên màu nav cho cả 2 chế độ */
+    --nav-background-hover-dark: #9b9a9a; /* Giữ nguyên màu nav hover cho cả 2 chế độ */
+    --primary-color-dark: #007bff; /* Có thể điều chỉnh màu primary cho dark mode nếu muốn */
+    --secondary-color-dark: #6c757d;
+    --success-color-dark: #28a745;
+    --danger-color-dark: #dc3545;
+    --warning-color-dark: #ffc107;
+    --info-color-dark: #17a2b8;
+    --light-color-dark: #2d2d2d;
+    --dark-color-dark: #ffffff;
+    --card-background-dark: #2d2d2d;
+    --border-color-dark: #404040;
+    --font-color-dark: #ffffff;
+    --nav-font-color-dark: #ffffff; /* Giữ nguyên màu chữ nav cho cả 2 chế độ */
+    --box-shadow-dark: 0 2px 4px rgba(255, 255, 255, 0.1);
+
+    /* Typography (chung) */
+    --font-primary: 'InterVariable', sans-serif;
+    --font-size-base: 16px;
+    --font-size-small: 14px;
+    --font-size-large: 18px;
+    --line-height-base: 1.5;
+
+    /* Spacing (chung) */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    /* Border (chung) */
+    --border-radius: 4px;
+    --border-width: 1px;
+
+    /* Default to Light Mode */
+    --text: var(--text-light);
+    --background-color: var(--background-color-light);
+    --background-color-hover: var(--background-color-hover-light);
+    --nav-background: var(--nav-background-light);
+    --nav-background-hover: var(--nav-background-hover-light);
+    --primary-color: var(--primary-color-light);
+    --secondary-color: var(--secondary-color-light);
+    --success-color: var(--success-color-light);
+    --danger-color: var(--danger-color-light);
+    --warning-color: var(--warning-color-light);
+    --info-color: var(--info-color-light);
+    --light-color: var(--light-color-light);
+    --dark-color: var(--dark-color-light);
+    --card-background: var(--card-background-light);
+    --border-color: var(--border-color-light);
+    --font-color: var(--font-color-light);
+    --nav-font-color: var(--nav-font-color-light);
+    --box-shadow: var(--box-shadow-light);
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+    --text: var(--text-dark);
+    --background-color: var(--background-color-dark);
+    --background-color-hover: var(--background-color-hover-dark);
+    --nav-background: var(--nav-background-dark);
+    --nav-background-hover: var(--nav-background-hover-dark);
+    --primary-color: var(--primary-color-dark);
+    --secondary-color: var(--secondary-color-dark);
+    --success-color: var(--success-color-dark);
+    --danger-color: var(--danger-color-dark);
+    --warning-color: var(--warning-color-dark);
+    --info-color: var(--info-color-dark);
+    --light-color: var(--light-color-dark);
+    --dark-color: var(--dark-color-dark);
+    --card-background: var(--card-background-dark);
+    --border-color: var(--border-color-dark);
+    --font-color: var(--font-color-dark);
+    --nav-font-color: var(--nav-font-color-dark);
+    --box-shadow: var(--box-shadow-dark);
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "InterVariable", sans-serif;
+    display: grid;
+    grid-template-areas:
+        "nav  header header"
+        "nav main main"
+        ;
+    grid-template-columns: 250px 1fr;
+    grid-template-rows: 50px 1fr  ;
+    height: 100vh;
+    background-color: var(--background-color);
+    color: var(--font-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+h1, h2, h3, h4, h5, h6, p {
+    font-family: var(--font-primary);
+    color: var(--text);
+    padding: 0;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+a {
+    font-family: var(--font-primary);
+    color: var(--font-color);
+    text-decoration: none !important;
+    padding: 0;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+nav a {
+    color: var(--nav-font-color) !important; /* Ensure nav links use nav font color */
+}
+.h1 {
+    font-size: 36px ;
+    font-weight: 700 ;
+}
+.h2 {
+    font-size: 32px;
+    font-weight: 700;
+}
+.h3 {
+  
+    font-size: 28px;
+    font-weight: 700;
+}
+.h4 {
+  
+    font-size: 24px;
+    font-weight: 600;
+}
+.h5 {
+  
+    font-size: 20px;
+    font-weight: 600;
+}
+.h6 {
+  
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+nav h1,nav h2,nav h3,nav h4,nav h5,nav h6,nav a,nav p,nav span {
+    font-family: var(--font-primary);
+    color: var(--nav-font-color) !important;
+}
+
+/* Table Styles */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: var(--font-color);
+    background-color: var(--card-background); /* Use card background for table body */
+    border: 1px solid var(--border-color);
+    border-collapse: collapse; /* Ensure borders are combined */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid var(--border-color);
+    transition: border-color 0.3s ease;
+    background-color: var(--background-color);
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid var(--border-color);
+    background-color: var(--background-color-hover); /* Slightly different background for header */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.table tbody + tbody {
+    border-top: 2px solid var(--border-color);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--background-color-hover); /* For striped tables */
+    transition: background-color 0.3s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--background-color-hover); /* Hover effect */
+    transition: background-color 0.3s ease;
+}
+
+/* Responsive table wrapper */
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-family: var(--font-primary);
+    color: var(--nav-font-color) !important;
+}
+
+
+.fa-solid{
+    /* font-size: 20px; */
+    color: var(--font-color);
+    transition: color 0.3s ease;
+}
+header {
+    grid-area: header;
+    color: var(--font-color);
+    font-size: 18px;
+    font-weight: 600;
+    background-color: var(--light-color);
+    transition: all 0.5s ease-in-out;
+}
+nav {
+    grid-area: nav;
+    background-color: var(--nav-background);
+    transition: background-color 0.3s ease;
+}
+
+footer {
+    grid-area: footer;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: var(--nav-background);
+    transition: background-color 0.3s ease;
+}
+
+
+
+main {
+    grid-area: main;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    background-color: var(--background-color);
+    transition: all 0.5s ease-in-out;
+}
+
+/* Main animation when navigation is collapsed */
+
+/* Card styles for dark mode */
+.card {
+    background-color: var(--card-background) !important;
+    border-color: var(--border-color) !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.card-header {
+    background-color: var(--background-color-hover) !important;
+    border-color: var(--border-color) !important;
+    color: var(--font-color) !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Form controls */
+.form-control {
+    background-color: var(--card-background) !important;
+    border-color: var(--border-color) !important;
+    color: var(--font-color) !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.form-control:focus {
+    background-color: var(--card-background) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--font-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--background-color-hover);
+}
+
+/* Navigation styles */
+.nav-link {
+    color: var(--nav-font-color) !important;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: var(--nav-background-hover) !important;
+    color: var(--nav-font-color) !important;
+}
+
+/* Dropdown styles */
+.dropdown-menu {
+    background-color: var(--card-background) !important;
+    border-color: var(--border-color) !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.dropdown-item {
+    color: var(--font-color) !important;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: var(--background-color-hover) !important;
+    color: var(--font-color) !important;
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--spacing-md);
+    background-color: var(--card-background);
+    color: var(--font-color);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+table th, table td {
+    color: var(--text) !important;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    text-align: left;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    background-color: var(--background-color);
+}
+tr {
+    background-color: var(--background-color);
+}
+tbody tr:nth-child(even) {
+    background-color: var(--background-color);
+}
+table thead th {
+    background-color: var(--background-color-hover);
+    font-weight: bold;
+}

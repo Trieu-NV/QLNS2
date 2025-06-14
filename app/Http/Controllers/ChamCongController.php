@@ -15,9 +15,9 @@ class ChamCongController extends Controller
      */
     public function index(Request $request)
     {
-        $today = now()->toDateString();
+        // $today = now()->toDateString();
         
-        // $today = '2025-06-15';
+        $today = '2025-06-10';
         $phongBans = PhongBan::all();
 
         // Tạo bản ghi chấm công cho nhân viên nếu chưa có cho ngày hôm nay

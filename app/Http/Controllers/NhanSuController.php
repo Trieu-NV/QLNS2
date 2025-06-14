@@ -50,6 +50,17 @@ class NhanSuController extends Controller
             $query->where('id_trinh_do', $request->trinh_do);
         }
 
+        // Lọc theo trạng thái
+        $trangThai = $request->input('trang_thai', '1'); // Mặc định là '1' (Hoạt động)
+        if ($trangThai !== null && $trangThai !== '') {
+            $query->where('trang_thai', $trangThai);
+        }
+
+        // Lọc theo trạng thái
+        if ($request->has('trang_thai') && $request->trang_thai !== null) {
+            $query->where('trang_thai', $request->trang_thai);
+        }
+
         // Sắp xếp
         $sortBy = $request->get('sort_by', 'created_at');
         $sortOrder = $request->get('sort_order', 'desc');
@@ -132,7 +143,7 @@ class NhanSuController extends Controller
             'id_chuc_vu' => 'required|exists:chuc_vu,id',
             'id_phong_ban' => 'required|exists:phong_ban,id',
             'id_trinh_do' => 'required|exists:trinh_do,id',
-            'trang_thai' => 'boolean'
+            'trang_thai' => 'required|boolean'
         ]);
         
         if ($request->hasFile('hinh_anh')) {
@@ -181,7 +192,7 @@ class NhanSuController extends Controller
             'id_chuc_vu' => 'required|exists:chuc_vu,id',
             'id_phong_ban' => 'required|exists:phong_ban,id',
             'id_trinh_do' => 'required|exists:trinh_do,id',
-            'trang_thai' => 'boolean'
+            'trang_thai' => 'required|boolean'
         ]);
         
         if ($request->hasFile('hinh_anh')) {

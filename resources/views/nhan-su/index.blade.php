@@ -62,6 +62,14 @@
                             </select>
                         </div>
                         <div class="col-lg-2 col-md-6">
+                            <label class="form-label">Trạng thái</label>
+                            <select name="trang_thai" class="form-select">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="1" {{ request('trang_thai', '1') === '1' ? 'selected' : '' }}>Hoạt động</option>
+                                <option value="0" {{ request('trang_thai') === '0' ? 'selected' : '' }}>Tạm dừng</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-6">
                             <label class="form-label">Sắp xếp theo</label>
                             <select name="sort_by" class="form-select">
                                 <option value="created_at" {{ request('sort_by') == 'created_at' ? 'selected' : '' }}>Ngày tạo</option>

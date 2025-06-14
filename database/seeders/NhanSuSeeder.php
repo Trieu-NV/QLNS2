@@ -37,7 +37,7 @@ class NhanSuSeeder extends Seeder
         ];
         
         // Tạo 50 nhân sự giả
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 15; $i++) {
             NhanSu::create([
                 'ma_nv' => 'NV' . str_pad($i + 1, 4, '0', STR_PAD_LEFT),
                 'ho_ten' => $hoTens[array_rand($hoTens)],

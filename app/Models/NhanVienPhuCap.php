@@ -8,6 +8,9 @@ class NhanVienPhuCap extends Pivot
 {
     protected $table = 'nhan_vien_phu_cap';
 
+    protected $primaryKey = ['ma_nv', 'id_phu_cap'];
+    public $incrementing = false;
+
     protected $fillable = [
         'ma_nv',
         'id_phu_cap',

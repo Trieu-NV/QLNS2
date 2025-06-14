@@ -47,10 +47,7 @@
             <label for="ngay_ky">Ngày Ký:</label>
             <input type="text" name="ngay_ky" id="ngay_ky" class="form-control datepicker" required>
         </div>
-        <div class="form-group">
-            <label for="so_lan_ky">Số lần Ký:</label>
-            <input type="number" name="so_lan_ky" id="so_lan_ky" class="form-control" value="1" required>
-        </div>
+
         <button type="submit" class="btn btn-primary">Thêm Hợp đồng</button>
         <a href="{{ route('hop-dong.index') }}" class="btn btn-secondary">Hủy</a>
     </form>

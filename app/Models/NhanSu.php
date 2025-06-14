@@ -55,4 +55,9 @@ class NhanSu extends Model
                     ->withPivot('ghi_chu')
                     ->withTimestamps();
     }
+
+    public function hopDong()
+    {
+        return $this->hasOne(HopDong::class, 'ma_nv', 'ma_nv');
+    }
 }

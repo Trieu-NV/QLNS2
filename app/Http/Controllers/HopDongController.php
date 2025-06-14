@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\HopDong;
 use App\Models\NhanSu;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class HopDongController extends Controller
 {
@@ -34,7 +36,7 @@ class HopDongController extends Controller
      */
     public function create()
     {
-        $nhanSu = NhanSu::all();
+        $nhanSu = NhanSu::where('trang_thai', 1)->get();
         return view('hop-dong.create', compact('nhanSu'));
     }
 
@@ -47,14 +49,37 @@ class HopDongController extends Controller
             'ma_nv' => 'required|exists:nhan_su,ma_nv',
             'loai_hop_dong' => 'required|integer|between:1,2',
             'luong' => 'required|numeric|min:0',
-            'ngay_bat_dau' => 'required|date',
-            'ngay_ket_thuc' => 'required|date|after:ngay_bat_dau',
-            'ngay_ky' => 'required|date',
+            'ngay_bat_dau' => 'required|date_format:d/m/Y',
+            'ngay_ket_thuc' => 'nullable|date_format:d/m/Y|after:ngay_bat_dau_formatted',
+            'ngay_ky' => 'required|date_format:d/m/Y',
         ]);
+
+        // Conditionally make ngay_ket_thuc required
+        if ($validated['loai_hop_dong'] == 1) {
+            $validated['ngay_ket_thuc'] = $request->validate([
+                'ngay_ket_thuc' => 'required|date_format:d/m/Y|after:ngay_bat_dau_formatted',
+            ])['ngay_ket_thuc'];
+        } else {
+            $validated['ngay_ket_thuc'] = null; // Set to null if not required
+        }
+
+        // Convert dates to 'Y-m-d' format for database storage
+        $validated['ngay_bat_dau'] = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['ngay_bat_dau'])->format('Y-m-d');
+        if ($validated['ngay_ket_thuc']) {
+            $validated['ngay_ket_thuc'] = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['ngay_ket_thuc'])->format('Y-m-d');
+        }
+        $validated['ngay_ky'] = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['ngay_ky'])->format('Y-m-d');
 
         try {
             DB::beginTransaction();
             
+            $latestHopDong = HopDong::where('ma_nv', $validated['ma_nv'])
+                                    ->orderBy('so_lan_ky', 'desc')
+                                    ->first();
+
+            $soLanKy = $latestHopDong ? $latestHopDong->so_lan_ky + 1 : 1;
+            $validated['so_lan_ky'] = $soLanKy;
+
             $hopDong = HopDong::create($validated);
             
             DB::commit();
@@ -64,6 +89,10 @@ class HopDongController extends Controller
                 
         } catch (\Exception $e) {
             DB::rollBack();
+            
+            // Log the exception for debugging
+            
+            
             return back()
                 ->withInput()
                 ->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
@@ -97,10 +126,27 @@ class HopDongController extends Controller
             'ma_nv' => 'required|exists:nhan_su,ma_nv',
             'loai_hop_dong' => 'required|integer|between:1,2',
             'luong' => 'required|numeric|min:0',
-            'ngay_bat_dau' => 'required|date',
-            'ngay_ket_thuc' => 'required|date|after:ngay_bat_dau',
-            'ngay_ky' => 'required|date',
+            'ngay_bat_dau' => 'required|date_format:d/m/Y',
+            'ngay_ket_thuc' => 'nullable|date_format:d/m/Y|after:ngay_bat_dau_formatted',
+            'ngay_ky' => 'required|date_format:d/m/Y',
         ]);
+
+        // Conditionally make ngay_ket_thuc required
+        if ($validated['loai_hop_dong'] == 1) {
+            $validated['ngay_ket_thuc'] = $request->validate([
+                'ngay_ket_thuc' => 'required|date_format:d/m/Y|after:ngay_bat_dau_formatted',
+            ])['ngay_ket_thuc'];
+        } else {
+            $validated['ngay_ket_thuc'] = null; // Set to null if not required
+        }
+
+        // Convert dates to 'Y-m-d' format for database storage
+        $validated['ngay_bat_dau'] = Carbon::createFromFormat('d/m/Y', $validated['ngay_bat_dau'])->format('Y-m-d');
+        if ($validated['ngay_ket_thuc']) {
+            $validated['ngay_ket_thuc'] = Carbon::createFromFormat('d/m/Y', $validated['ngay_ket_thuc'])->format('Y-m-d');
+        }
+        $validated['ngay_ky'] = Carbon::createFromFormat('d/m/Y', $validated['ngay_ky'])->format('Y-m-d');
+
 
         try {
             DB::beginTransaction();

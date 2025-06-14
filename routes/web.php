@@ -66,9 +66,9 @@ use Illuminate\Support\Facades\Hash;
         Route::get('nhan-su/export/excel', [NhanSuController::class, 'exportExcel'])->name('nhan-su.export.excel');
         Route::get('nhan-su/export/pdf', [NhanSuController::class, 'exportPdf'])->name('nhan-su.export.pdf');
 
-        Route::get('/luong', function () {
-            return view('luong');
-        })->name('luong');
+        Route::get('/luong', [App\Http\Controllers\LuongController::class, 'index'])->name('luong');
+
+        Route::get('/luong/report', [App\Http\Controllers\LuongController::class, 'index'])->name('luong.report');
 
         Route::resource('chuc-vu', ChucVuController::class);
         Route::resource('phong-ban', PhongBanController::class);

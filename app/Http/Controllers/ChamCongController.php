@@ -15,21 +15,25 @@ class ChamCongController extends Controller
      */
     public function index(Request $request)
     {
-        // $today = now()->toDateString();
-        
-        $today = '2025-06-10';
+        $ngayLoc = $request->input('ngay', now()->toDateString());
+
+        // Kiểm tra nếu ngày lọc là ngày trong tương lai thì không cho phép
+        if (Carbon::parse($ngayLoc)->isFuture()) {
+            return redirect()->back()->with('error', 'Không thể xem chấm công cho ngày trong tương lai.');
+        }
+        // $ngayLoc= '2025-06-01';
         $phongBans = PhongBan::all();
 
         // Tạo bản ghi chấm công cho nhân viên nếu chưa có cho ngày hôm nay
         $nhanSuHoatDong = NhanSu::where('trang_thai', 1)->get();
         foreach ($nhanSuHoatDong as $nhanVien) {
             ChamCong::firstOrCreate(
-                ['ma_nv' => $nhanVien->ma_nv, 'ngay' => $today],
+                ['ma_nv' => $nhanVien->ma_nv, 'ngay' => $ngayLoc],
                 ['trang_thai' => null] // Đặt trạng thái mặc định là null
             );
         }
         $query = ChamCong::with('nhanSu.phongBan')
-            ->where('ngay', $today);
+            ->where('ngay', $ngayLoc);
 
         // Tìm kiếm theo tên nhân viên
         if ($request->has('search_ten_nv') && $request->search_ten_nv) {
@@ -49,7 +53,7 @@ class ChamCongController extends Controller
 
         $chamCongs = $query->get();
 
-        return view('cham-cong.index', compact('chamCongs', 'phongBans'));
+        return view('cham-cong.index', compact('chamCongs', 'phongBans', 'ngayLoc'));
     }
 
     /**

@@ -2,17 +2,26 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Bảng Chấm Công - {{ \Carbon\Carbon::now()->format('d/m/Y') }}</h1>
+    <h1 class="mb-4">Bảng Chấm Công - {{ \Carbon\Carbon::parse($ngayLoc)->format('d/m/Y') }}</h1>
 
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
     <form method="GET" action="{{ route('cham-cong.index') }}" class="mb-4">
         <div class="row">
             <div class="col-md-4">
                 <input type="text" name="search_ten_nv" class="form-control" placeholder="Tìm theo tên nhân viên" value="{{ request('search_ten_nv') }}">
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="ngay" class="form-control" value="{{ request('ngay') }}">
             </div>
             <div class="col-md-3">
                 <select name="phong_ban_id" class="form-control">

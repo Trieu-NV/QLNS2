@@ -31,7 +31,7 @@ class ChuyenCanController extends Controller
         foreach ($nhanSuList as $nhanSu) {
             $firstDayOfMonth = Carbon::create($selectedYear, $selectedMonth, 1);
             $daysInMonth = $firstDayOfMonth->daysInMonth;
-            $soNgayCongChuan = 0;
+            $soNgayCongChuan = 0; // Bắt đầu từ 0
 
             for ($day = 1; $day <= $daysInMonth; $day++) {
                 $currentDate = Carbon::create($selectedYear, $selectedMonth, $day);
@@ -52,13 +52,15 @@ class ChuyenCanController extends Controller
 
             $tienThuong = 0;
             
-            if ($soNgayNghi == 0 && $soNgayPhep <= 1 && ($soNgayDiLam + $soNgayPhep) == $soNgayCongChuan) {
+            // Điều kiện tính tiền thưởng mềm hơn
+            if ($soNgayNghi == 0 && $soNgayPhep <= 2 && ($soNgayDiLam + $soNgayPhep) >= ($soNgayCongChuan - 1)) {
                 $tienThuong = 500000;
             }
 
-            // Store or update ChuyenCan record
+            // Tính tiền phạt
             $tienPhat = $soNgayNghi * 50000;
 
+            // Store or update ChuyenCan record
             $chuyenCanEntry = \App\Models\ChuyenCan::firstOrNew(
                 ['ma_nv' => $nhanSu->ma_nv, 'thang_nam' => $firstDayOfMonth->format('Y-m-01')],
 

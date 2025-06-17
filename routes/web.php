@@ -72,6 +72,8 @@ use Illuminate\Support\Facades\Hash;
 
         Route::get('/luong/export', [App\Http\Controllers\LuongController::class, 'export'])->name('luong.export');
 
+        Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
         Route::resource('chuc-vu', ChucVuController::class);
         Route::resource('phong-ban', PhongBanController::class);
         Route::resource('trinh-do', TrinhDoController::class);

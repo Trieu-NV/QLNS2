@@ -31,7 +31,8 @@ class NhanSuController extends Controller
                 $q->where('ma_nv', 'like', "%{$search}%")
                   ->orWhere('ho_ten', 'like', "%{$search}%")
                   ->orWhere('sdt', 'like', "%{$search}%")
-                  ->orWhere('dia_chi', 'like', "%{$search}%");
+                  ->orWhere('dia_chi', 'like', "%{$search}%")
+                  ->orWhereYear('ngay_sinh', 'like', "%{$search}%");
             });
         }
         
@@ -55,6 +56,14 @@ class NhanSuController extends Controller
         if ($trangThai !== null && $trangThai !== '') {
             $query->where('trang_thai', $trangThai);
         }
+// Filter by birth date range
+if ($request->has('ngay_sinh_from') && $request->ngay_sinh_from) {
+    $query->whereDate('ngay_sinh', '>=', $request->ngay_sinh_from);
+}
+
+if ($request->has('ngay_sinh_to') && $request->ngay_sinh_to) {
+    $query->whereDate('ngay_sinh', '<=', $request->ngay_sinh_to);
+}
 
         // Lọc theo trạng thái
         if ($request->has('trang_thai') && $request->trang_thai !== null) {

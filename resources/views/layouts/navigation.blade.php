@@ -1,4 +1,4 @@
-<nav>
+<nav >
     <div class=" d-flex justify-content-between align-items-center gap-2">
 
         <a href="{{route('home')}}" class="d-flex align-items-center gap-2">

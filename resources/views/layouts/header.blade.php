@@ -1,4 +1,4 @@
-<header>
+<header style="grid-area: header;">
     <i class="fa-solid fa-bars"></i>
     <div class="acc__container">
         <button class="theme-toggle" onclick="toggleTheme()">

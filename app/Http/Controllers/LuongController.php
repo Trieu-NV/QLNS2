@@ -8,6 +8,7 @@ use App\Models\NhanSu;
 use App\Models\HopDong;
 use App\Models\PhuCap;
 use App\Models\ChamCong;
+use App\Models\ChuyenCan;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SalaryExport;
@@ -29,16 +30,22 @@ class LuongController extends Controller
             $basicSalary = $employee->hopDong->luong ?? 0;
             $totalAllowance = $employee->phuCap->sum('so-tien');
 
-            // Calculate days off for the month/year
+            // Lấy dữ liệu chuyên cần
+            $chuyenCan = ChuyenCan::where('ma_nv', $employee->ma_nv)
+                ->whereYear('thang_nam', $year)
+                ->whereMonth('thang_nam', $month)
+                ->first();
+
+            // Tính số ngày nghỉ từ bảng chấm công
             $daysOff = ChamCong::where('ma_nv', $employee->ma_nv)
                 ->whereYear('ngay', $year)
                 ->whereMonth('ngay', $month)
-                ->where('trang_thai', 'nghi') // Assuming 'nghi' means day off
+                ->where('trang_thai', 'Nghỉ')
                 ->count();
 
-            // Placeholder for bonus and penalty, as they are not in current models
-            $bonus = 0; 
-            $penalty = 0;
+            // Lấy tiền thưởng và tiền phạt từ bảng chuyên cần
+            $bonus = $chuyenCan ? $chuyenCan->tien_thuong : 0;
+            $penalty = $chuyenCan ? $chuyenCan->tien_phat : 0;
 
             $totalSalary = $basicSalary + $totalAllowance + $bonus - $penalty;
             if ($congChuan > 0) {

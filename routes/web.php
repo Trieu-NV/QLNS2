@@ -44,16 +44,17 @@ use Illuminate\Support\Facades\Hash;
             $loaitk = $check[0]->loaitk;
             if($loaitk == 0){
                 //TODO: sua lai ve giao dien ql tài khoản
-                $response = response(redirect('/luong'));
+                $response = redirect('/luong');
             }
             if($loaitk == 1){
-                $response = response(redirect('/dashboard'));
+                $response = redirect('/dashboard');
             }
             if($loaitk == 2){
-                $response = response(redirect('/cham-cong'));
+                $response = redirect('/cham-cong');
             }
         }
         $response->cookie('username', $username, 60); // Cookie expires in 60 minutes
+        // exit; // Thêm dòng này
         return $response;
     })->withoutMiddleware('check.username.cookie')->name('login.post');
   
@@ -76,7 +77,7 @@ use Illuminate\Support\Facades\Hash;
 
         Route::resource('chuc-vu', ChucVuController::class);
         Route::resource('phong-ban', PhongBanController::class);
-        Route::resource('trinh-do', TrinhDoController::class);
+        Route::resource('trinh-do', TrinhDoController::class)->middleware('check.username.cookie');
         Route::resource('phu-cap', PhuCapController::class);
         Route::get('phu-cap/{phu_cap}', [PhuCapController::class, 'show'])->name('phu-cap.show');
         Route::resource('hop-dong', HopDongController::class);

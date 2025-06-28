@@ -21,15 +21,15 @@
             <label for="ma_nv">Nhân viên:</label>
             <select name="ma_nv" id="ma_nv" class="form-control">
                 @foreach ($nhanSu as $nhan)
-                    <option value="{{ $nhan->ma_nv }}" {{ $hopDong->ma_nv == $nhan->ma_nv ? 'selected' : '' }}>{{ $nhan->ho_ten }} ({{ $nhan->ma_nv }})</option>
+                    <option value="{{ $nhan->ma_nv }}" {{ old('ma_nv', $hopDong->ma_nv) == $nhan->ma_nv ? 'selected' : '' }}>{{ $nhan->ho_ten }} ({{ $nhan->ma_nv }})</option>
                 @endforeach
             </select>
         </div>
         <div class="form-group">
             <label for="loai_hop_dong">Loại Hợp đồng:</label>
             <select name="loai_hop_dong" id="loai_hop_dong" class="form-control">
-                <option value="1" {{ $hopDong->loai_hop_dong == 1 ? 'selected' : '' }}>Hợp đồng có thời hạn</option>
-                <option value="2" {{ $hopDong->loai_hop_dong == 2 ? 'selected' : '' }}>Hợp đồng không thời hạn</option>
+                <option value="1" {{ old('loai_hop_dong', $hopDong->loai_hop_dong) == 1 ? 'selected' : '' }}>Hợp đồng có thời hạn</option>
+                <option value="2" {{ old('loai_hop_dong', $hopDong->loai_hop_dong) == 2 ? 'selected' : '' }}>Hợp đồng không thời hạn</option>
             </select>
         </div>
         <div class="form-group">
@@ -38,15 +38,15 @@
         </div>
         <div class="form-group">
             <label for="ngay_bat_dau">Ngày Bắt đầu:</label>
-            <input type="text" name="ngay_bat_dau" id="ngay_bat_dau" class="form-control datepicker" value="{{ \Carbon\Carbon::parse($hopDong->ngay_bat_dau)->format('d/m/Y') }}" required>
+            <input type="text" name="ngay_bat_dau" id="ngay_bat_dau" class="form-control datepicker" value="{{ old('ngay_bat_dau', \Carbon\Carbon::parse($hopDong->ngay_bat_dau)->format('d/m/Y')) }}" required>
         </div>
         <div class="form-group">
             <label for="ngay_ket_thuc">Ngày Kết thúc (Chỉ cho HĐ có thời hạn):</label>
-            <input type="text" name="ngay_ket_thuc" id="ngay_ket_thuc" class="form-control datepicker" value="{{ $hopDong->ngay_ket_thuc ? \Carbon\Carbon::parse($hopDong->ngay_ket_thuc)->format('d/m/Y') : '' }}">
+            <input type="text" name="ngay_ket_thuc" id="ngay_ket_thuc" class="form-control datepicker" value="{{ old('ngay_ket_thuc', $hopDong->ngay_ket_thuc ? \Carbon\Carbon::parse($hopDong->ngay_ket_thuc)->format('d/m/Y') : '') }}">
         </div>
         <div class="form-group">
             <label for="ngay_ky">Ngày Ký:</label>
-            <input type="text" name="ngay_ky" id="ngay_ky" class="form-control datepicker" value="{{ \Carbon\Carbon::parse($hopDong->ngay_ky)->format('d/m/Y') }}" required>
+            <input type="text" name="ngay_ky" id="ngay_ky" class="form-control datepicker" value="{{ old('ngay_ky', \Carbon\Carbon::parse($hopDong->ngay_ky)->format('d/m/Y')) }}" required>
         </div>
         <div class="form-group">
             <label for="so_lan_ky">Số lần Ký:</label>
@@ -70,8 +70,10 @@
             if ($(this).val() == '2') { // '2' is for Hợp đồng không thời hạn
                 $('#ngay_ket_thuc').val('');
                 $('#ngay_ket_thuc').prop('disabled', true);
+                $('#ngay_ket_thuc').css('cursor', 'no-drop');
             } else {
                 $('#ngay_ket_thuc').prop('disabled', false);
+                $('#ngay_ket_thuc').css('cursor', 'auto');
             }
         });
 

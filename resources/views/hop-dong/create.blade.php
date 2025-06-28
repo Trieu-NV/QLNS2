@@ -20,32 +20,32 @@
             <label for="ma_nv">Nhân viên:</label>
             <select name="ma_nv" id="ma_nv" class="form-control">
                 @foreach ($nhanSu as $nhan)
-                    <option value="{{ $nhan->ma_nv }}">{{ $nhan->ho_ten }} ({{ $nhan->ma_nv }})</option>
+                    <option value="{{ $nhan->ma_nv }}" {{ old('ma_nv') == $nhan->ma_nv ? 'selected' : '' }}>{{ $nhan->ho_ten }} ({{ $nhan->ma_nv }})</option>
                 @endforeach
             </select>
         </div>
         <div class="form-group">
             <label for="loai_hop_dong">Loại Hợp đồng:</label>
             <select name="loai_hop_dong" id="loai_hop_dong" class="form-control">
-                <option value="1">Hợp đồng có thời hạn</option>
-                <option value="2">Hợp đồng không thời hạn</option>
+                <option value="1" {{ old('loai_hop_dong') == 1 ? 'selected' : '' }}>Hợp đồng có thời hạn</option>
+                <option value="2" {{ old('loai_hop_dong') == 2 ? 'selected' : '' }}>Hợp đồng không thời hạn</option>
             </select>
         </div>
         <div class="form-group">
             <label for="luong">Lương:</label>
-            <input type="number" name="luong" id="luong" class="form-control" step="0.01" required>
+            <input type="number" name="luong" id="luong" class="form-control" step="0.01" value="{{ old('luong') }}" required>
         </div>
         <div class="form-group">
             <label for="ngay_bat_dau">Ngày Bắt đầu:</label>
-            <input type="text" name="ngay_bat_dau" id="ngay_bat_dau" class="form-control datepicker" required>
+            <input type="text" name="ngay_bat_dau" id="ngay_bat_dau" class="form-control datepicker" value="{{ old('ngay_bat_dau') }}" required>
         </div>
         <div class="form-group">
             <label for="ngay_ket_thuc">Ngày Kết thúc (Chỉ cho HĐ có thời hạn):</label>
-            <input type="text" name="ngay_ket_thuc" id="ngay_ket_thuc" class="form-control datepicker">
+            <input type="text" name="ngay_ket_thuc" id="ngay_ket_thuc" class="form-control datepicker" value="{{ old('ngay_ket_thuc') }}">
         </div>
         <div class="form-group">
             <label for="ngay_ky">Ngày Ký:</label>
-            <input type="text" name="ngay_ky" id="ngay_ky" class="form-control datepicker" required>
+            <input type="text" name="ngay_ky" id="ngay_ky" class="form-control datepicker" value="{{ old('ngay_ky') }}" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Thêm Hợp đồng</button>

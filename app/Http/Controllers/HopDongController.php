@@ -50,25 +50,77 @@ class HopDongController extends Controller
             'loai_hop_dong' => 'required|integer|between:1,2',
             'luong' => 'required|numeric|min:0',
             'ngay_bat_dau' => 'required|date_format:d/m/Y',
-            'ngay_ket_thuc' => 'nullable|date_format:d/m/Y|after:ngay_bat_dau_formatted',
+            'ngay_ket_thuc' => 'nullable|date_format:d/m/Y',
             'ngay_ky' => 'required|date_format:d/m/Y',
         ]);
 
-        // Conditionally make ngay_ket_thuc required
+        // Convert dates to Carbon objects for comparison
+        $ngayKy = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['ngay_ky']);
+        $ngayBatDau = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['ngay_bat_dau']);
+        
+        // Check if employee has previous contracts
+        $previousContract = HopDong::where('ma_nv', $validated['ma_nv'])
+                                  ->orderBy('so_lan_ky', 'desc')
+                                  ->first();
+        
+        if ($previousContract) {
+            if ($previousContract->ngay_ket_thuc) {
+                // If previous contract has end date, new contract signing date must be after previous contract end date
+                $previousEndDate = \Carbon\Carbon::parse($previousContract->ngay_ket_thuc);
+                if ($ngayKy <= $previousEndDate) {
+                    return back()
+                        ->withInput()
+                        ->withErrors(['ngay_ky' => 'Ngày ký hợp đồng mới phải sau ngày kết thúc của hợp đồng trước đó (' . $previousEndDate->format('d/m/Y') . ').']);
+                }
+            } else {
+                // If previous contract has no end date (indefinite), new contract signing date must be after previous contract start date
+                $previousStartDate = \Carbon\Carbon::parse($previousContract->ngay_bat_dau);
+                if ($ngayKy <= $previousStartDate) {
+                    return back()
+                        ->withInput()
+                        ->withErrors(['ngay_ky' => 'Ngày ký hợp đồng mới phải sau ngày bắt đầu của hợp đồng trước đó (' . $previousStartDate->format('d/m/Y') . ').']);
+                }
+            }
+        }
+        
+        // Validation logic based on contract type
         if ($validated['loai_hop_dong'] == 1) {
-            $validated['ngay_ket_thuc'] = $request->validate([
-                'ngay_ket_thuc' => 'required|date_format:d/m/Y|after:ngay_bat_dau_formatted',
-            ])['ngay_ket_thuc'];
+            // Loại có thời hạn: ngày ký < ngày bắt đầu < ngày kết thúc
+            if (!$request->ngay_ket_thuc) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['ngay_ket_thuc' => 'Hợp đồng có thời hạn phải có ngày kết thúc.']);
+            }
+            
+            $ngayKetThuc = \Carbon\Carbon::createFromFormat('d/m/Y', $request->ngay_ket_thuc);
+            
+            if ($ngayKy >= $ngayBatDau) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['ngay_ky' => 'Ngày ký phải trước ngày bắt đầu.']);
+            }
+            
+            if ($ngayBatDau >= $ngayKetThuc) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['ngay_bat_dau' => 'Ngày bắt đầu phải trước ngày kết thúc.']);
+            }
+            
+            $validated['ngay_ket_thuc'] = $ngayKetThuc->format('Y-m-d');
         } else {
-            $validated['ngay_ket_thuc'] = null; // Set to null if not required
+            // Loại không thời hạn: ngày ký < ngày bắt đầu
+            if ($ngayKy >= $ngayBatDau) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['ngay_ky' => 'Ngày ký phải trước ngày bắt đầu.']);
+            }
+            
+            $validated['ngay_ket_thuc'] = null;
         }
 
         // Convert dates to 'Y-m-d' format for database storage
-        $validated['ngay_bat_dau'] = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['ngay_bat_dau'])->format('Y-m-d');
-        if ($validated['ngay_ket_thuc']) {
-            $validated['ngay_ket_thuc'] = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['ngay_ket_thuc'])->format('Y-m-d');
-        }
-        $validated['ngay_ky'] = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['ngay_ky'])->format('Y-m-d');
+        $validated['ngay_bat_dau'] = $ngayBatDau->format('Y-m-d');
+        $validated['ngay_ky'] = $ngayKy->format('Y-m-d');
 
         try {
             DB::beginTransaction();
@@ -91,7 +143,7 @@ class HopDongController extends Controller
             DB::rollBack();
             
             // Log the exception for debugging
-            
+            Log::error('Error creating hop dong: ' . $e->getMessage());
             
             return back()
                 ->withInput()
@@ -120,49 +172,103 @@ class HopDongController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HopDong $hopDong)
+    public function update(Request $request, $id)
     {
+        $hopDong = HopDong::findOrFail($id);
+
         $validated = $request->validate([
             'ma_nv' => 'required|exists:nhan_su,ma_nv',
             'loai_hop_dong' => 'required|integer|between:1,2',
             'luong' => 'required|numeric|min:0',
             'ngay_bat_dau' => 'required|date_format:d/m/Y',
-            'ngay_ket_thuc' => 'nullable|date_format:d/m/Y|after:ngay_bat_dau_formatted',
+            'ngay_ket_thuc' => 'nullable|date_format:d/m/Y',
             'ngay_ky' => 'required|date_format:d/m/Y',
         ]);
 
-        // Conditionally make ngay_ket_thuc required
+        // Convert dates to Carbon objects for comparison
+        $ngayKy = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['ngay_ky']);
+        $ngayBatDau = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['ngay_bat_dau']);
+        
+        // Check if employee has previous contracts (excluding current contract being updated)
+        $previousContract = HopDong::where('ma_nv', $validated['ma_nv'])
+                                  ->where('id', '!=', $id)
+                                  ->orderBy('so_lan_ky', 'desc')
+                                  ->first();
+        
+        if ($previousContract) {
+            if ($previousContract->ngay_ket_thuc) {
+                // If previous contract has end date, updated contract signing date must be after previous contract end date
+                $previousEndDate = \Carbon\Carbon::parse($previousContract->ngay_ket_thuc);
+                if ($ngayKy <= $previousEndDate) {
+                    return back()
+                        ->withInput()
+                        ->withErrors(['ngay_ky' => 'Ngày ký hợp đồng phải sau ngày kết thúc của hợp đồng trước đó (' . $previousEndDate->format('d/m/Y') . ').']);
+                }
+            } else {
+                // If previous contract has no end date (indefinite), updated contract signing date must be after previous contract start date
+                $previousStartDate = \Carbon\Carbon::parse($previousContract->ngay_bat_dau);
+                if ($ngayKy <= $previousStartDate) {
+                    return back()
+                        ->withInput()
+                        ->withErrors(['ngay_ky' => 'Ngày ký hợp đồng phải sau ngày bắt đầu của hợp đồng trước đó (' . $previousStartDate->format('d/m/Y') . ').']);
+                }
+            }
+        }
+        
+        // Validation logic based on contract type
         if ($validated['loai_hop_dong'] == 1) {
-            $validated['ngay_ket_thuc'] = $request->validate([
-                'ngay_ket_thuc' => 'required|date_format:d/m/Y|after:ngay_bat_dau_formatted',
-            ])['ngay_ket_thuc'];
+            // Loại có thời hạn: ngày ký < ngày bắt đầu < ngày kết thúc
+            if (!$request->ngay_ket_thuc) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['ngay_ket_thuc' => 'Hợp đồng có thời hạn phải có ngày kết thúc.']);
+            }
+            
+            $ngayKetThuc = \Carbon\Carbon::createFromFormat('d/m/Y', $request->ngay_ket_thuc);
+            
+            if ($ngayKy >= $ngayBatDau) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['ngay_ky' => 'Ngày ký phải trước ngày bắt đầu.']);
+            }
+            
+            if ($ngayBatDau >= $ngayKetThuc) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['ngay_bat_dau' => 'Ngày bắt đầu phải trước ngày kết thúc.']);
+            }
+            
+            $validated['ngay_ket_thuc'] = $ngayKetThuc->format('Y-m-d');
         } else {
-            $validated['ngay_ket_thuc'] = null; // Set to null if not required
+            // Loại không thời hạn: ngày ký < ngày bắt đầu
+            if ($ngayKy >= $ngayBatDau) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['ngay_ky' => 'Ngày ký phải trước ngày bắt đầu.']);
+            }
+            
+            $validated['ngay_ket_thuc'] = null;
         }
 
         // Convert dates to 'Y-m-d' format for database storage
-        $validated['ngay_bat_dau'] = Carbon::createFromFormat('d/m/Y', $validated['ngay_bat_dau'])->format('Y-m-d');
-        if ($validated['ngay_ket_thuc']) {
-            $validated['ngay_ket_thuc'] = Carbon::createFromFormat('d/m/Y', $validated['ngay_ket_thuc'])->format('Y-m-d');
-        }
-        $validated['ngay_ky'] = Carbon::createFromFormat('d/m/Y', $validated['ngay_ky'])->format('Y-m-d');
-
+        $validated['ngay_bat_dau'] = $ngayBatDau->format('Y-m-d');
+        $validated['ngay_ky'] = $ngayKy->format('Y-m-d');
 
         try {
             DB::beginTransaction();
-            
+
             $hopDong->update($validated);
-            
+
             DB::commit();
-            return redirect()
-                ->route('hop-dong.index')
-                ->with('success', 'Cập nhật hợp đồng thành công');
-                
+
+            return redirect()->route('hop-dong.index')->with('success', 'Cập nhật hợp đồng thành công!');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()
-                ->withInput()
-                ->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+            
+            // Log the exception for debugging
+            Log::error('Error updating hop dong: ' . $e->getMessage());
+            
+            return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
 

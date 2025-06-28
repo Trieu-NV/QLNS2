@@ -58,6 +58,15 @@ class NhanSu extends Model
 
     public function hopDong()
     {
-        return $this->hasOne(HopDong::class, 'ma_nv', 'ma_nv');
+        return $this->hasMany(HopDong::class, 'ma_nv', 'ma_nv');
+    }
+
+    /**
+     * Lấy hợp đồng gần nhất (có so_lan_ky cao nhất)
+     */
+    public function hopDongGanNhat()
+    {
+        return $this->hasOne(HopDong::class, 'ma_nv', 'ma_nv')
+                    ->orderBy('so_lan_ky', 'desc');
     }
 }

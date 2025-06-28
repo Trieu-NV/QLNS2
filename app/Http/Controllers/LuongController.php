@@ -21,13 +21,14 @@ class LuongController extends Controller
         $year = $request->input('year', Carbon::now()->year);
         $congChuan = 22; // Standard working days in a month
 
-        $employees = NhanSu::with(['phongBan', 'hopDong', 'phuCap'])
+        $employees = NhanSu::with(['phongBan', 'hopDongGanNhat', 'phuCap'])
             ->where('trang_thai', true) // Filter for active employees
             ->get();
 
         $salaryData = [];
         foreach ($employees as $employee) {
-            $basicSalary = $employee->hopDong->luong ?? 0;
+            // Lấy lương cơ bản từ hợp đồng gần nhất (có so_lan_ky cao nhất)
+            $basicSalary = $employee->hopDongGanNhat->luong ?? 0;
             $totalAllowance = $employee->phuCap->sum('so-tien');
 
             // Lấy dữ liệu chuyên cần

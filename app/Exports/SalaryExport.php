@@ -30,13 +30,14 @@ class SalaryExport implements FromCollection, WithHeadings
         $year = $this->year;
         $congChuan = 22; // Standard working days in a month
 
-        $employees = NhanSu::with(['phongBan', 'hopDong', 'phuCap'])
+        $employees = NhanSu::with(['phongBan', 'hopDongGanNhat', 'phuCap'])
             ->where('trang_thai', true)
             ->get();
 
         $salaryData = [];
         foreach ($employees as $employee) {
-            $basicSalary = $employee->hopDong->luong ?? 0;
+            // Lấy lương cơ bản từ hợp đồng gần nhất (có so_lan_ky cao nhất)
+            $basicSalary = $employee->hopDongGanNhat->luong ?? 0;
             $totalAllowance = $employee->phuCap->sum('so-tien');
 
             $daysOff = ChamCong::where('ma_nv', $employee->ma_nv)

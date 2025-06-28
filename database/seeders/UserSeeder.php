@@ -2,39 +2,54 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        User::create([
+        // Xóa tài khoản cũ nếu có
+        DB::table('users')->whereIn('username', ['admin', 'hr', 'totruong'])->delete();
+
+        // Tạo tài khoản Admin (loaitk = 0)
+        DB::table('users')->insert([
             'username' => 'admin',
             'password' => Hash::make('123456'),
-            'info' => 'Administrator',
+            'loaitk' => 0,
             'email' => 'admin@example.com',
             'sdt' => '0123456789',
-            'loaitk' => 0, // admin
+            'info' => 'Tài khoản quản trị viên',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
-        User::create([
-            'username' => 'manager',
+        // Tạo tài khoản HR (loaitk = 1)
+        DB::table('users')->insert([
+            'username' => 'hr',
             'password' => Hash::make('123456'),
-            'info' => 'Quản lý',
-            'email' => 'manager@example.com',
-            'sdt' => '0987654321',
-            'loaitk' => 1, // quản lý
+            'loaitk' => 1,
+            'email' => 'hr@example.com',
+            'sdt' => '0123456790',
+            'info' => 'Tài khoản nhân sự',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
-        User::create([
-            'username' => 'user',
+        // Tạo tài khoản Tổ trưởng (loaitk = 2)
+        DB::table('users')->insert([
+            'username' => 'totruong',
             'password' => Hash::make('123456'),
-            'info' => 'Người dùng',
-            'email' => 'user@example.com',
-            'sdt' => '0369852147',
-            'loaitk' => 2, // người dùng
+            'loaitk' => 2,
+            'email' => 'totruong@example.com',
+            'sdt' => '0123456791',
+            'info' => 'Tài khoản tổ trưởng',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

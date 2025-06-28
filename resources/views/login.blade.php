@@ -19,15 +19,28 @@
     <div class="login-wrapper container-fluid d-flex justify-content-center align-items-center vh-100">
         <div class="login-box">
             <h1 class="text-center h1">Đăng Nhập</h1>
+            
+            @if(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+            
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+            
             <form action="{{route('login.post')}}" method="POST" class="login-form">
                 @csrf
                 <div class="login-acc login-info">
                     <label for="username">Tài Khoản</label>
-                    <input type="text" value="admin" name="username" id="username" placeholder="Nhập tài khoản" required>
+                    <input type="text" value="{{ old('username', 'admin') }}" name="username" id="username" placeholder="Nhập tài khoản" required>
                 </div>
                 <div class="login-pass login-info">
                     <label for="password">Mật Khẩu</label>
-                    <input type="password" value="123456" name="password" id="password" placeholder="Nhập mật khẩu" required>
+                    <input type="password" value="{{ old('password', '123456') }}" name="password" id="password" placeholder="Nhập mật khẩu" required>
                 </div>
                 <div class="show-password">
                     <input type="checkbox" id="showPassword">

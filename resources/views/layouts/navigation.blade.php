@@ -7,92 +7,20 @@
         </a>
     </div>
     <ul class="nav-list">
-        <li class="nav-item {{ request()->routeIs('home.*') ? 'active' : '' }}" data-tooltip="Dashboard">
-            <a class="nav-link  " href="{{ route('home') }}">
-                <i class="fa-solid fa-house" style="color:var(--nav-font-color);"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-        <!--  -->
-        <li class="nav-item {{ request()->routeIs('nhan-su.*') ? 'active' : '' }}" data-tooltip="Nhân Sự">
-            <a class="nav-link " href="{{ route('nhan-su.index') }}">
-                <i class="fa-solid fa-users" style="color:var(--nav-font-color);"></i>
-                <span>Nhân Sự</span>
-            </a>
-        </li>
-        <!--  -->
-        <li class="nav-item {{ request()->routeIs('luong.*') ? 'active' : '' }} " data-tooltip="Lương">
-            <a class="nav-link " href="{{ route('luong') }}">
-                <i class="fa-solid fa-money-bill" style="color:var(--nav-font-color);"></i>
-                <span>Lương</span>
-            </a>
-        </li>
-        <!--  -->
-        <li class="nav-item {{ request()->routeIs('hop-dong.*') ? 'active' : '' }} " data-tooltip="Hợp Đồng">
-            <a class="nav-link " href="{{ route('hop-dong.index') }}">
-                <i class="fa-solid fa-receipt" style="color:var(--nav-font-color);"></i>
-                <span>Hợp Đồng</span>
-            </a>
-        </li>
-        <!--  -->
-        <li class="nav-item {{ request()->routeIs('bao-hiem-yte.*') ? 'active' : '' }} " data-tooltip="Bảo Hiểm">
-            <a class="nav-link " href="{{ route('bao-hiem-yte.index') }}">
-                <i class="fa-solid fa-shield-halved" style="color:var(--nav-font-color);"></i>
-                <span>Bảo Hiểm</span>
-            </a>
-        </li>
-        <!--  -->
-        <li class="nav-item {{ request()->routeIs('phong-ban.*') ? 'active' : '' }}" data-tooltip="Phòng Ban">
-            <a class="nav-link  " href="{{ route('phong-ban.index') }}" >
-                <i class="fa-solid fa-building" style="color:var(--nav-font-color);"></i>
-                <span>Phòng Ban</span>
-            </a>
-        </li>
-        <!--  -->
-        <li class="nav-item {{ request()->routeIs('chuc-vu.*') ? 'active' : '' }}" data-tooltip="Chức Vụ">
-            <a class="nav-link " href="{{ route('chuc-vu.index') }}">
-                <i class="fa-solid fa-crown" style="color:var(--nav-font-color);"></i>
-                <span>Chức Vụ</span>
-            </a>
-        </li>
-        <!--  -->
-        <li class="nav-item {{ request()->routeIs('trinh-do.*') ? 'active' : '' }}" data-tooltip="Trình Độ">
-            <a class="nav-link " href="{{ route('trinh-do.index') }}">
-                <i class="fa-solid fa-graduation-cap" style="color:var(--nav-font-color);"></i>
-                <span>Trình Độ</span>
-            </a>
-        </li>
-        <!--  -->
-        <!--  -->
-        <li class="nav-item {{ request()->routeIs('phu-cap.*') ? 'active' : '' }}" data-tooltip="Phụ Cấp">
-            <a class="nav-link " href="{{ route('nhan-vien-phu-cap.index') }}">
-                <i class="fa-solid fa-hands-holding-child" style="color:var(--nav-font-color);"></i>
-                <span>Phụ Cấp</span>
-            </a>
-        </li>
-        <!--  -->
-        <li class="nav-item {{ request()->routeIs('cham-cong.*') ? 'active' : '' }} " data-tooltip="Chấm công">
-            <a class="nav-link " href="{{ route('cham-cong.index') }}">
-                <i class="fa-solid fa-calendar-days" style="color:var(--nav-font-color);"></i>
-                <span>Chấm công</span>
-            </a>
-        </li>
-        <!--  -->
-        <li class="nav-item {{ request()->routeIs('chuyen-can.*') ? 'active' : '' }} " data-tooltip="Chuyên Cần">
-            <a class="nav-link " href="{{ route('chuyen-can.index') }}">
-                <i class="fa-solid fa-star" style="color:var(--nav-font-color);"></i> <!-- Example icon, change as needed -->
-                <span>Chuyên Cần</span>
-            </a>
-        </li>
-        <!--  -->
-        <li class="nav-item " data-tooltip="Tài Khoản">
-            <a class="nav-link " href="">
-                <i class="fa-solid fa-user" style="color:var(--nav-font-color);"></i>
-                <span>Tài Khoản</span>
-            </a>
-        </li>
+        @php
+            use App\Helpers\PermissionHelper;
+            $navigationItems = PermissionHelper::getNavigationItems();
+        @endphp
         
-       
+        @foreach($navigationItems as $item)
+            <li class="nav-item {{ request()->routeIs($item['route'].'*') ? 'active' : '' }}" data-tooltip="{{ $item['text'] }}">
+                <a class="nav-link" href="{{ route($item['route']) }}">
+                    <i class="{{ $item['icon'] }}" style="color:var(--nav-font-color);"></i>
+                    <span>{{ $item['text'] }}</span>
+                </a>
+            </li>
+        @endforeach
+      
     </ul>
 </nav>
 <style>

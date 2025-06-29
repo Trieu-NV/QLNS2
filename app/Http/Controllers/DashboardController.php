@@ -19,21 +19,21 @@ class DashboardController extends Controller
 
         $latestNhanSu = NhanSu::with(['chucVu', 'phongBan'])->latest()->take(5)->get();
 
-        $genderStats = NhanSu::selectRaw('GioiTinh, count(*) as count')
-            ->groupBy('GioiTinh')
-            ->pluck('count', 'GioiTinh')
+        $genderStats = NhanSu::selectRaw('gioi_tinh, count(*) as count')
+            ->groupBy('gioi_tinh')
+            ->pluck('count', 'gioi_tinh')
             ->toArray();
 
-        $departmentStats = NhanSu::join('phong_bans', 'nhan_sus.MaPhongBan', '=', 'phong_bans.MaPhongBan')
-            ->selectRaw('phong_bans.TenPhongBan, count(*) as count')
-            ->groupBy('phong_bans.TenPhongBan')
-            ->pluck('count', 'phong_bans.TenPhongBan')
+        $departmentStats = NhanSu::join('phong_ban', 'nhan_su.id_phong_ban', '=', 'phong_ban.id')
+            ->selectRaw('phong_ban.ten_phong_ban, count(*) as count')
+            ->groupBy('phong_ban.ten_phong_ban')
+            ->pluck('count', 'phong_ban.ten_phong_ban')
             ->toArray();
 
-        $educationStats = NhanSu::join('trinh_dos', 'nhan_sus.MaTrinhDo', '=', 'trinh_dos.MaTrinhDo')
-            ->selectRaw('trinh_dos.TenTrinhDo, count(*) as count')
-            ->groupBy('trinh_dos.TenTrinhDo')
-            ->pluck('count', 'trinh_dos.TenTrinhDo')
+        $educationStats = NhanSu::join('trinh_do', 'nhan_su.id_trinh_do', '=', 'trinh_do.id')
+            ->selectRaw('trinh_do.ten_trinh_do, count(*) as count')
+            ->groupBy('trinh_do.ten_trinh_do')
+            ->pluck('count', 'trinh_do.ten_trinh_do')
             ->toArray();
 
         return view('dashboard', compact('totalNhanSu', 'totalPhongBan', 'totalChucVu', 'totalTrinhDo', 'latestNhanSu', 'genderStats', 'departmentStats', 'educationStats'));

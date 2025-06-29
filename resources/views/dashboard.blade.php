@@ -92,9 +92,9 @@
                                 <tbody>
                                     @foreach($latestNhanSu as $nhanSu)
                                         <tr>
-                                            <td>{{ $nhanSu->HoTen }}</td>
-                                            <td>{{ $nhanSu->chucVu->TenChucVu ?? 'N/A' }}</td>
-                                            <td>{{ $nhanSu->phongBan->TenPhongBan ?? 'N/A' }}</td>
+                                            <td>{{ $nhanSu->ho_ten }}</td>
+                                            <td>{{ $nhanSu->chucVu->ten_chuc_vu ?? 'N/A' }}</td>
+                                            <td>{{ $nhanSu->phongBan->ten_phong_ban ?? 'N/A' }}</td>
                                             <td>
                                                 <a class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                 <a class="btn btn-danger btn-action" data-toggle="tooltip" title="Delete" data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?" data-confirm-yes="alert('Deleted')"><i class="fas fa-trash"></i></a>
@@ -151,9 +151,9 @@
             var genderChart = new Chart(genderCtx, {
                 type: 'pie',
                 data: {
-                    labels: ['Male', 'Female', 'Other'],
+                    labels: ['Nam', 'Nữ', 'Khác'],
                     datasets: [{
-                        data: [{{ $genderStats['male'] ?? 0 }}, {{ $genderStats['female'] ?? 0 }}, {{ $genderStats['other'] ?? 0 }}],
+                        data: [{{ $genderStats['Nam'] ?? 0 }}, {{ $genderStats['Nữ'] ?? 0 }}, {{ $genderStats['Khác'] ?? 0 }}],
                         backgroundColor: ['#6777ef', '#fc544b', '#ffa426'],
                         hoverOffset: 4
                     }]

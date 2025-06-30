@@ -21,7 +21,7 @@
                 <input type="text" name="search_ten_nv" class="form-control" placeholder="Tìm theo tên nhân viên" value="{{ request('search_ten_nv') }}">
             </div>
             <div class="col-md-3">
-                <input type="date" name="ngay" class="form-control" value="{{ request('ngay') }}">
+            <input type="date" name="ngay" class="form-control" value="{{ request('ngay', \Carbon\Carbon::now()->format('Y-m-d')) }}">
             </div>
             <div class="col-md-3">
                 <select name="phong_ban_id" class="form-control">
@@ -67,7 +67,7 @@
                     </td>
                     <td id="ghi_chu_{{ $chamCong->id }}">{{ $chamCong->ghi_chu }}</td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-info mr-1 direct-cham-cong-btn" data-id="{{ $chamCong->id }}">
+                        <button type="button" class="btn btn-sm btn-success mr-1 direct-cham-cong-btn" data-id="{{ $chamCong->id }}">
                             Chấm Công
                         </button>
                         <button type="button" class="btn btn-sm btn-warning mr-1" data-bs-toggle="modal" data-bs-target="#nghiModal{{ $chamCong->id }}">

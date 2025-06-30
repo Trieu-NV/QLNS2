@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -36,6 +35,7 @@
                     <th>Tiền Thưởng</th>
                     <th>Tiền Phạt</th>
                     <th>Số Ngày Nghỉ</th>
+                    <th>Bảo hiểm NV đóng</th>
                     <th>Tổng Lương</th>
                 </tr>
             </thead>
@@ -51,6 +51,7 @@
                         <td>{{ number_format($data['tien_thuong'], 0, ',', '.') }}</td>
                         <td>{{ number_format($data['tien_phat'], 0, ',', '.') }}</td>
                         <td>{{ $data['so_ngay_nghi'] }}</td>
+                        <td>{{ number_format($data['bao_hiem_nv'], 0, ',', '.') }}</td>
                         <td>{{ number_format($data['tong_luong'], 0, ',', '.') }}</td>
                     </tr>
                 @endforeach

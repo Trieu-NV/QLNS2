@@ -48,10 +48,14 @@ class LuongController extends Controller
             $bonus = $chuyenCan ? $chuyenCan->tien_thuong : 0;
             $penalty = $chuyenCan ? $chuyenCan->tien_phat : 0;
 
+            // Tính tổng tiền bảo hiểm nhân viên đóng
+            $insurance = $basicSalary * (0.08 + 0.015 + 0.01); // 8% BHXH + 1.5% BHYT + 1% BHTN
+
             $totalSalary = $basicSalary + $totalAllowance + $bonus - $penalty;
             if ($congChuan > 0) {
                 $totalSalary -= ($basicSalary / $congChuan) * $daysOff;
             }
+            $totalSalary -= $insurance;
 
             $salaryData[] = [
                 'ma_nv' => $employee->ma_nv,
@@ -62,6 +66,7 @@ class LuongController extends Controller
                 'tien_thuong' => $bonus,
                 'tien_phat' => $penalty,
                 'so_ngay_nghi' => $daysOff,
+                'bao_hiem_nv' => $insurance,
                 'tong_luong' => $totalSalary,
             ];
         }

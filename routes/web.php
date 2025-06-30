@@ -22,7 +22,7 @@ use App\Http\Controllers\NhanVienPhuCapController;
 use App\Http\Controllers\AuthController;
 
 // Home route (if authenticated)
-Route::get('/', [DashboardController::class, 'index'])->middleware('check.username.cookie')->name('home');
+Route::get('/', [DashboardController::class, 'index'])->middleware(['check.username.cookie', 'check.permission:1'])->name('home');
 
 // Authentication routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -59,8 +59,8 @@ Route::middleware(['check.username.cookie', 'check.permission:0'])->group(functi
 
 // Routes cho HR (loaitk = 1) - Quản lý nhân sự, hợp đồng, lương, v.v.
 Route::middleware(['check.username.cookie', 'check.permission:1'])->group(function () {
-     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-
+    
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::resource('nhan-su', NhanSuController::class);
     Route::get('/api/nhan-su/search', [NhanSuController::class, 'search'])->name('nhan-su.search');
     Route::get('nhan-su/export/excel', [NhanSuController::class, 'exportExcel'])->name('nhan-su.export.excel');

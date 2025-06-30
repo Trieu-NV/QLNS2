@@ -64,7 +64,7 @@ class PermissionHelper
         
         $allItems = [
             '0' => [ // Admin - Quản lý tài khoản user
-                ['route' => 'home', 'icon' => 'fa-solid fa-house', 'text' => 'Dashboard'],
+                // ['route' => 'home', 'icon' => 'fa-solid fa-house', 'text' => 'Dashboard'],
                 ['route' => 'users.index', 'icon' => 'fa-solid fa-users-cog', 'text' => 'Quản lý tài khoản'],
             ],
             '1' => [ // HR - Quản lý nhân sự, hợp đồng, lương, v.v.

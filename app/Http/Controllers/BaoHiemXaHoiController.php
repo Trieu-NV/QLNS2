@@ -15,9 +15,22 @@ class BaoHiemXaHoiController extends Controller
     public function index(Request $request)
     {
         $thang_nam = $request->input('thang_nam', now()->format('Y-m'));
-        $nhanSus = NhanSu::with(['hopDong' => function($q) {
+        $search = $request->input('search');
+        $phong_ban = $request->input('phong_ban');
+
+        $nhanSuQuery = NhanSu::with(['hopDong' => function($q) {
             $q->latest('id');
-        }])->get();
+        }, 'phongBan']);
+
+        if ($search) {
+            $nhanSuQuery->where('ho_ten', 'like', "%$search%");
+        }
+        if ($phong_ban) {
+            $nhanSuQuery->where('id_phong_ban', $phong_ban);
+        }
+
+        $nhanSus = $nhanSuQuery->get();
+        $phongBans = \App\Models\PhongBan::all();
 
         $dsBaoHiem = [];
         foreach ($nhanSus as $nhanSu) {
@@ -40,6 +53,6 @@ class BaoHiemXaHoiController extends Controller
                 'tong_dn' => $luong * 0.215,
             ];
         }
-        return view('bao-hiem-xa-hoi.index', compact('dsBaoHiem', 'thang_nam'));
+        return view('bao-hiem-xa-hoi.index', compact('dsBaoHiem', 'thang_nam', 'phongBans', 'search', 'phong_ban'));
     }
 } 

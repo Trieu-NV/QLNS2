@@ -13,6 +13,7 @@ use App\Http\Controllers\NhanSuController;
 use App\Http\Controllers\PhuCapController;
 use App\Http\Controllers\HopDongController;
 use App\Http\Controllers\BaoHiemYteController;
+use App\Http\Controllers\BaoHiemXaHoiController;
 use App\Http\Controllers\ChamCongController;
 use App\Http\Controllers\ChuyenCanController;
 use App\Http\Controllers\UserController;
@@ -49,11 +50,7 @@ Route::middleware(['check.username.cookie'])->group(function () {
     Route::post('/change-password', [AuthController::class, 'changePassword'])->name('password.update');
 });
 
-// Routes cho tất cả loại tài khoản
-Route::middleware(['check.username.cookie','check.permission:1'])->group(function () {
-    // Dashboard cho tất cả
-    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-});
+   
 
 // Routes cho Admin (loaitk = 0) - Quản lý tài khoản user
 Route::middleware(['check.username.cookie', 'check.permission:0'])->group(function () {
@@ -62,6 +59,8 @@ Route::middleware(['check.username.cookie', 'check.permission:0'])->group(functi
 
 // Routes cho HR (loaitk = 1) - Quản lý nhân sự, hợp đồng, lương, v.v.
 Route::middleware(['check.username.cookie', 'check.permission:1'])->group(function () {
+     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
     Route::resource('nhan-su', NhanSuController::class);
     Route::get('/api/nhan-su/search', [NhanSuController::class, 'search'])->name('nhan-su.search');
     Route::get('nhan-su/export/excel', [NhanSuController::class, 'exportExcel'])->name('nhan-su.export.excel');
@@ -76,6 +75,7 @@ Route::middleware(['check.username.cookie', 'check.permission:1'])->group(functi
     Route::get('phu-cap/{phu_cap}', [PhuCapController::class, 'show'])->name('phu-cap.show');
     Route::resource('hop-dong', HopDongController::class);
     Route::resource('bao-hiem-yte', BaoHiemYteController::class);
+    Route::resource('bao-hiem-xa-hoi', BaoHiemXaHoiController::class);
     Route::resource('nhan-vien-phu-cap', NhanVienPhuCapController::class)->parameters([
         'nhan-vien-phu-cap' => 'ma_nv,id_phu_cap'
     ]);
@@ -89,6 +89,8 @@ Route::middleware(['check.username.cookie', 'check.permission:2'])->group(functi
     Route::resource('cham-cong', ChamCongController::class);
     Route::get('/chuyen-can', [ChuyenCanController::class, 'index'])->name('chuyen-can.index');
 });
+
+
 
 require __DIR__ . '/settings.php'; // dùng để import các route phụ vào route chính
 require __DIR__ . '/auth.php';

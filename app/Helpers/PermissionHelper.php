@@ -73,6 +73,7 @@ class PermissionHelper
                 ['route' => 'luong', 'icon' => 'fa-solid fa-money-bill', 'text' => 'Lương'],
                 ['route' => 'hop-dong.index', 'icon' => 'fa-solid fa-receipt', 'text' => 'Hợp Đồng'],
                 ['route' => 'bao-hiem-yte.index', 'icon' => 'fa-solid fa-shield-halved', 'text' => 'Bảo Hiểm'],
+                ['route' => 'bao-hiem-xa-hoi.index', 'icon' => 'fa-solid fa-shield-halved', 'text' => 'Bảo Hiểm Xã Hội'],
                 ['route' => 'phong-ban.index', 'icon' => 'fa-solid fa-building', 'text' => 'Phòng Ban'],
                 ['route' => 'chuc-vu.index', 'icon' => 'fa-solid fa-crown', 'text' => 'Chức Vụ'],
                 ['route' => 'trinh-do.index', 'icon' => 'fa-solid fa-graduation-cap', 'text' => 'Trình Độ'],

@@ -21,6 +21,18 @@
         </div>
     @endif
 
+    <form method="GET" class="mb-3 row g-2">
+        <div class="col-md-4">
+            <input type="text" name="search" class="form-control" placeholder="Tìm kiếm tài khoản, email, SĐT, thông tin..." value="{{ request('search', $search ?? '') }}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ route('users.index') }}" class="btn btn-secondary w-100">Đặt lại</a>
+        </div>
+    </form>
+
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">

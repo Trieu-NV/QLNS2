@@ -7,17 +7,14 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
-
-    <title>Đăng Nhập</title>
-
+    <title>Quên Mật Khẩu</title>
 </head>
 
 <body>
     <div class="login-wrapper container-fluid d-flex justify-content-center align-items-center vh-100">
         <div class="login-box">
-            <h1 class="text-center h1">Đăng Nhập</h1>
+            <h1 class="text-center h1">Quên Mật Khẩu</h1>
             
             @if(session('error'))
                 <div class="alert alert-danger">
@@ -41,12 +38,12 @@
                 </div>
             @endif
             
-            <form action="{{ route('login.post') }}" method="POST" class="login-form">
+            <form action="{{ route('password.email') }}" method="POST" class="login-form">
                 @csrf
                 <div class="login-acc login-info">
                     <label for="username">Tài Khoản</label>
                     <input type="text" 
-                           value="{{ old('username', 'admin') }}" 
+                           value="{{ old('username') }}" 
                            name="username" 
                            id="username" 
                            placeholder="Nhập tài khoản" 
@@ -59,45 +56,30 @@
                     @enderror
                 </div>
                 <div class="login-pass login-info">
-                    <label for="password">Mật Khẩu</label>
-                    <input type="password" 
-                           value="{{ old('password', '123456') }}" 
-                           name="password" 
-                           id="password" 
-                           placeholder="Nhập mật khẩu" 
-                           class="@error('password') is-invalid @enderror"
+                    <label for="email">Email</label>
+                    <input type="email" 
+                           value="{{ old('email') }}" 
+                           name="email" 
+                           id="email" 
+                           placeholder="Nhập email đăng ký" 
+                           class="@error('email') is-invalid @enderror"
                            required>
-                    @error('password')
+                    @error('email')
                         <div class="invalid-feedback d-block">
                             {{ $message }}
                         </div>
                     @enderror
                 </div>
-                <div class="show-password">
-                    <input type="checkbox" id="showPassword">
-                    <label for="showPassword">Hiển thị mật khẩu</label>
-                </div>
-                <button type="submit" class="login-btn">Đăng Nhập</button>
                 
-                <a class="link" href="{{ route('password.request') }}">Quên Mật Khẩu</a>
+                <button type="submit" class="login-btn">Gửi Link Đặt Lại Mật Khẩu</button>
+                
+                <div class="text-center mt-3">
+                    <a class="link" href="{{ route('login') }}">Quay Lại Đăng Nhập</a>
+                </div>
             </form>
         </div>
-
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-        $('#showPassword').change(function() {
-            if ($(this).is(':checked')) {
-                $('#password').attr('type', 'text');
-            } else {
-                $('#password').attr('type', 'password');
-            }
-        });
-    });
-</script>
-</html>
+</html> 

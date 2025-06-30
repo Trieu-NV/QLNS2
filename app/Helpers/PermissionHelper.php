@@ -79,7 +79,6 @@ class PermissionHelper
                 ['route' => 'nhan-vien-phu-cap.index', 'icon' => 'fa-solid fa-hands-holding-child', 'text' => 'Phụ Cấp'],
             ],
             '2' => [ // Tổ trưởng - Quản lý chấm công và chuyên cần
-                // ['route' => 'home', 'icon' => 'fa-solid fa-house', 'text' => 'Dashboard'],
                 ['route' => 'cham-cong.index', 'icon' => 'fa-solid fa-calendar-days', 'text' => 'Chấm công'],
                 ['route' => 'chuyen-can.index', 'icon' => 'fa-solid fa-star', 'text' => 'Chuyên Cần'],
             ],

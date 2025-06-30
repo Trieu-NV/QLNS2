@@ -5,23 +5,28 @@
             <i class="fa-solid fa-sun"></i>
             <i class="fa-solid fa-moon" style="display:none;"></i>
         </button>
-        <div class="acc__avatar">
+        <div class="acc__avatar" id="userProfileBtn" onclick="toggleUserDropdown()">
             <i class="fa-solid fa-circle-user d-flex align-items-center justify-content-center"></i>
         </div>
-        <div class="dropdown">
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="">Thông Tin Cá Nhân</a></li>
-                <li><a class="dropdown-item" href="">Đổi Mật Khẩu</a></li>
+        <span class="acc__name" id="userInfoDisplay">
+            @php
+                $user = request()->attributes->get('current_user');
+            @endphp
+            {{ $user && $user->info ? $user->info : ($user ? $user->username : '') }}
+        </span>
+        <div class="dropdown" id="userDropdown" style="display:none; position: absolute; right: 10px; top: 60px; min-width: 180px; z-index: 999;">
+            <ul class="dropdown-menu show" style="display:block; position:static;">
+                <li><a class="dropdown-item" href="{{ route('profile') }}">Hồ sơ</a></li>
+                <li><a class="dropdown-item" href="{{ route('password.change') }}">Đổi Mật Khẩu</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                    <form method="POST" action="">
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="dropdown-item">Đăng Xuất</button>
                     </form>
                 </li>
             </ul>
         </div>
-
     </div>
 </header>
 <style>
@@ -178,4 +183,17 @@
             moonIcon.style.display = 'none';
         }
     });
+</script>
+<script>
+function toggleUserDropdown() {
+    var dropdown = document.getElementById('userDropdown');
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+}
+document.addEventListener('click', function(event) {
+    var dropdown = document.getElementById('userDropdown');
+    var btn = document.getElementById('userProfileBtn');
+    if (!btn.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.style.display = 'none';
+    }
+});
 </script>

@@ -16,11 +16,12 @@
                     </select>
                 </div>
                 <div class="relative">
-                    <select name="year" class="appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                    <select name="year" class="appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-1 border border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500" style="border-width:1px;">
                         @for ($y = Carbon\Carbon::now()->year - 5; $y <= Carbon\Carbon::now()->year + 5; $y++)
                             <option value="{{ $y }}" {{ $y == $selectedYear ? 'selected' : '' }}>Năm {{ $y }}</option>
                         @endfor
                     </select>
+                    
                 </div>
                 <div class="block relative">
                     <button type="submit"

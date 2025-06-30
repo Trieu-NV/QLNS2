@@ -20,7 +20,8 @@
                 </a>
             </li>
         @endforeach
-      
+        
+        <!-- Đã xóa nút Hồ sơ và Đăng xuất ở navigation -->
     </ul>
 </nav>
 <style>
@@ -149,9 +150,17 @@
         font-size: 20px;
         font-weight: 600;
         line-height: 24px;
-
+        text-decoration: none;
     }
   
+    .logout-btn {
+        color: #dc3545 !important;
+    }
+    
+    .logout-btn:hover {
+        background-color: #dc3545 !important;
+        color: white !important;
+    }
 
     .nav-item {
         width: 100%;
@@ -184,8 +193,17 @@
     .nav-item .nav-link i::before {
         font-size: 22px;
     }
-
-    .nav-link {
-        text-decoration: none;
-    }
 </style>
+
+<script>
+function logoutWithJS(event) {
+    event.preventDefault();
+    
+    // Clear cookies using JavaScript
+    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "user_type=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    
+    // Submit the form
+    document.getElementById('logoutForm').submit();
+}
+</script>

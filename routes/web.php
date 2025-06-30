@@ -18,64 +18,39 @@ use App\Http\Controllers\ChuyenCanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NhanVienPhuCapController;
-
+use App\Http\Controllers\AuthController;
 
 // Home route (if authenticated)
 Route::get('/', [DashboardController::class, 'index'])->middleware('check.username.cookie')->name('home');
 
-Route::get('/login', function () {
-    return view('login');
-})->withoutMiddleware('check.username.cookie')->name('login'); //không chạy trên route này
+// Authentication routes
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/reset-password/{token}', [AuthController::class, 'resetPassword'])->name('password.update');
 
-Route::post('/login', function (Illuminate\Http\Request $request) {
-    //lấy dât từ request
-    $username = $request->input('username'); // Get username from request or use a default
-    $password = $request->input('password');
+// Temporary test route for logout
+Route::get('/test-logout', [AuthController::class, 'testLogout'])->name('test.logout');
+Route::get('/logout-alt', [AuthController::class, 'logoutAlternative'])->name('logout.alt');
+Route::get('/logout-final', [AuthController::class, 'logoutFinal'])->name('logout.final');
+Route::get('/test-logout-page', function() {
+    return view('auth.test-logout');
+})->name('test.logout.page');
 
-    // Kiểm tra username và password có được nhập không
-    if (empty($username) || empty($password)) {
-        return redirect('/login')->with('error', 'Vui lòng nhập đầy đủ username và password.');
-    }
-
-    $check = DB::select('select * from users where username = ?', [$username]);
-
-    // Kiểm tra user có tồn tại không
-    if (count($check) == 0) {
-        return redirect('/login')->with('error', 'Username không tồn tại.');
-    }
-
-    $hashedPassword = $check[0]->password;
-
-    // Kiểm tra password có đúng không
-    if (!Hash::check($password, $hashedPassword)) {
-        return redirect('/login')->with('error', 'Password không đúng.');
-    }
-
-    // Đăng nhập thành công
-    $loaitk = $check[0]->loaitk;
-    $response = null;
-
-    if ($loaitk == 0) {
-        // Admin - chuyển đến quản lý tài khoản
-        $response = redirect('/users');
-    } elseif ($loaitk == 1) {
-        // HR - chuyển đến dashboard
-        $response = redirect('/dashboard');
-    } elseif ($loaitk == 2) {
-        // Tổ trưởng - chuyển đến chấm công
-        $response = redirect('/cham-cong');
-    } else {
-        // Loại tài khoản không xác định
-        $response = redirect('/dashboard');
-    }
-
-    // Set cookie và thông báo thành công
-    $response->cookie('username', $username, 60); // Cookie expires in 60 minutes
-    return $response->with('success', 'Đăng nhập thành công!');
-})->withoutMiddleware('check.username.cookie')->name('login.post');
+// Password change routes (for authenticated users)
+Route::middleware(['check.username.cookie'])->group(function () {
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    Route::get('/profile/edit', [AuthController::class, 'editProfile'])->name('profile.edit');
+    Route::post('/profile/edit', [AuthController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/change-password', [AuthController::class, 'showChangePasswordForm'])->name('password.change');
+    Route::post('/change-password', [AuthController::class, 'changePassword'])->name('password.update');
+});
 
 // Routes cho tất cả loại tài khoản
-Route::middleware(['check.username.cookie'])->group(function () {
+Route::middleware(['check.username.cookie','check.permission:1'])->group(function () {
     // Dashboard cho tất cả
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 });

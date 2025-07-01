@@ -6,19 +6,45 @@
 
         <form action="{{ route('luong.report') }}" method="GET" class="mb-4">
             <div class="form-row d-flex gap-3">
-                <div class="col-md-3">
+                <div class="col-md-1">
                     <label for="month">Tháng:</label>
                     <input type="number" id="month" name="month" class="form-control" value="{{ $month }}" min="1" max="12">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-1">
                     <label for="year">Năm:</label>
                     <input type="number" id="year" name="year" class="form-control" value="{{ $year }}" min="2000" max="2100">
                 </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary">Xem Báo Cáo</button>
+                <div class="col-md-2">
+                    <label for="phong_ban">Phòng ban:</label>
+                    <select name="phong_ban" id="phong_ban" class="form-select">
+                        <option value="">Tất cả phòng ban</option>
+                        @foreach($phongBans as $pb)
+                            <option value="{{ $pb->id }}" {{ (request('phong_ban', $phongBanId ?? '') == $pb->id) ? 'selected' : '' }}>{{ $pb->ten_phong_ban }}</option>
+                        @endforeach
+                    </select>
                 </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <a href="{{ route('luong.export', ['month' => $month, 'year' => $year]) }}" class="btn btn-success">Xuất Excel</a>
+                <div class="col-md-2">
+                    <label for="sort_by">Sắp xếp theo:</label>
+                    <select name="sort_by" id="sort_by" class="form-select">
+                        <option value="tong_luong" {{ (request('sort_by', $sortBy ?? '') == 'tong_luong') ? 'selected' : '' }}>Tổng lương</option>
+                        <option value="luong_co_ban" {{ (request('sort_by', $sortBy ?? '') == 'luong_co_ban') ? 'selected' : '' }}>Lương cơ bản</option>
+                        <option value="phu_cap" {{ (request('sort_by', $sortBy ?? '') == 'phu_cap') ? 'selected' : '' }}>Phụ cấp</option>
+                        <option value="tien_thuong" {{ (request('sort_by', $sortBy ?? '') == 'tien_thuong') ? 'selected' : '' }}>Tiền thưởng</option>
+                        <option value="tien_phat" {{ (request('sort_by', $sortBy ?? '') == 'tien_phat') ? 'selected' : '' }}>Tiền phạt</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="sort_order">Thứ tự:</label>
+                    <select name="sort_order" id="sort_order" class="form-select">
+                        <option value="desc" {{ (request('sort_order', $sortOrder ?? '') == 'desc') ? 'selected' : '' }}>Giảm dần</option>
+                        <option value="asc" {{ (request('sort_order', $sortOrder ?? '') == 'asc') ? 'selected' : '' }}>Tăng dần</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Xem Báo Cáo</button>
+                </div>
+                <div class="col-md-1 d-flex align-items-end">
+                    <a href="{{ route('luong.export', array_merge(request()->all(), ['month' => $month, 'year' => $year])) }}" class="btn btn-success w-100">Xuất Excel</a>
                 </div>
             </div>
         </form>

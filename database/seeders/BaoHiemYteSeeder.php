@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 
 class BaoHiemYteSeeder extends Seeder
 {
@@ -12,40 +13,35 @@ class BaoHiemYteSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\BaoHiemYte::create([
-            'idbh' => 'BH00001',
-            'ma_nv' => 'NV0001',
-            'so_bao_hiem' => '1234567890',
-            'ngay_cap' => '2023-01-01',
-            'noi_cap' => 'TP.HCM',
-            'noi_kham_benh' => 'Bệnh viện A',
-        ]);
+        $nhanSus = \App\Models\NhanSu::all();
 
-        \App\Models\BaoHiemYte::create([
-            'idbh' => 'BH00002',
-            'ma_nv' => 'NV0002',
-            'so_bao_hiem' => '0987654321',
-            'ngay_cap' => '2023-02-01',
-            'noi_cap' => 'Hà Nội',
-            'noi_kham_benh' => 'Bệnh viện B',
-        ]);
+        if ($nhanSus->isEmpty()) {
+            Log::info('No NhanSu found. Please seed NhanSu table first.');
+            return;
+        }
 
-        \App\Models\BaoHiemYte::create([
-            'idbh' => 'BH00003',
-            'ma_nv' => 'NV0003',
-            'so_bao_hiem' => '1122334455',
-            'ngay_cap' => '2023-03-01',
-            'noi_cap' => 'Đà Nẵng',
-            'noi_kham_benh' => 'Bệnh viện C',
-        ]);
+        $baseSoBaoHiem = 1000000000;
+        $baseNgayCap = '2023-01-01';
+        $noiCaps = ['TP.HCM', 'Hà Nội', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng'];
+        $noiKhamBenhs = ['Bệnh viện A', 'Bệnh viện B', 'Bệnh viện C', 'Bệnh viện D', 'Bệnh viện E'];
 
-        \App\Models\BaoHiemYte::create([
-            'idbh' => 'BH00004',
-            'ma_nv' => 'NV0004',
-            'so_bao_hiem' => '6677889900',
-            'ngay_cap' => '2023-04-01',
-            'noi_cap' => 'Cần Thơ',
-            'noi_kham_benh' => 'Bệnh viện D',
-        ]);
+        $i = 0;
+        foreach ($nhanSus as $nhanSu) {
+            $idbh = 'BH' . str_pad($i + 1, 5, '0', STR_PAD_LEFT);
+            $so_bao_hiem = (string)($baseSoBaoHiem + $i);
+            $ngay_cap = date('Y-m-d', strtotime("$baseNgayCap +$i months"));
+            $noi_cap = $noiCaps[$i % count($noiCaps)];
+            $noi_kham_benh = $noiKhamBenhs[$i % count($noiKhamBenhs)];
+
+            \App\Models\BaoHiemYte::create([
+                'idbh' => $idbh,
+                'ma_nv' => $nhanSu->ma_nv,
+                'so_bao_hiem' => $so_bao_hiem,
+                'ngay_cap' => $ngay_cap,
+                'noi_cap' => $noi_cap,
+                'noi_kham_benh' => $noi_kham_benh,
+            ]);
+            $i++;
+        }
     }
 }

@@ -2,7 +2,7 @@
     <div class=" d-flex justify-content-between align-items-center gap-2">
 
         <a href="{{route('home')}}" class="d-flex align-items-center gap-2">
-            <img class="logo" src="/storage/logo.png" alt="Logo" class="logo">
+            <img class="logo" src="/images/logo.png" alt="Logo" class="logo">
             <h1 class="h1" style="white-space: nowrap;">HẢI VÂN</h1>
         </a>
     </div>

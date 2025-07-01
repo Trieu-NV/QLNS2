@@ -19,12 +19,12 @@ class NhanVienPhuCapSeeder extends Seeder
     {
         // Ensure NhanSu and PhuCap tables have data before seeding NhanVienPhuCap
         if (NhanSu::count() == 0) {
-            $this->command->info('Table nhan_su is empty. Running NhanSuSeeder...');
+            $this->command->info('Bạn cần thêm nhân sự ');
             $this->call(NhanSuSeeder::class);
         }
 
         if (PhuCap::count() == 0) {
-            $this->command->info('Table phu_cap is empty. Running PhuCapSeeder...');
+            $this->command->info('Bạn cần thêm phụ cấp');
             $this->call(PhuCapSeeder::class);
         }
 

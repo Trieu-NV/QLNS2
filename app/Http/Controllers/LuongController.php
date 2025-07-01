@@ -12,6 +12,7 @@ use App\Models\ChuyenCan;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SalaryExport;
+use App\Models\PhongBan;
 
 class LuongController extends Controller
 {
@@ -21,9 +22,16 @@ class LuongController extends Controller
         $year = $request->input('year', Carbon::now()->year);
         $congChuan = 22; // Standard working days in a month
 
-        $employees = NhanSu::with(['phongBan', 'hopDongGanNhat', 'phuCap'])
-            ->where('trang_thai', true) // Filter for active employees
-            ->get();
+        $phongBanId = $request->input('phong_ban');
+        $sortBy = $request->input('sort_by', 'tong_luong');
+        $sortOrder = $request->input('sort_order', 'desc');
+
+        $employeesQuery = NhanSu::with(['phongBan', 'hopDongGanNhat', 'phuCap'])
+            ->where('trang_thai', true);
+        if ($phongBanId) {
+            $employeesQuery->where('id_phong_ban', $phongBanId);
+        }
+        $employees = $employeesQuery->get();
 
         $salaryData = [];
         foreach ($employees as $employee) {
@@ -70,8 +78,17 @@ class LuongController extends Controller
                 'tong_luong' => $totalSalary,
             ];
         }
+        // Sắp xếp salaryData
+        usort($salaryData, function($a, $b) use ($sortBy, $sortOrder) {
+            if ($sortOrder === 'asc') {
+                return $a[$sortBy] <=> $b[$sortBy];
+            } else {
+                return $b[$sortBy] <=> $a[$sortBy];
+            }
+        });
 
-        return view('luong', compact('salaryData', 'month', 'year'));
+        $phongBans = PhongBan::all();
+        return view('luong', compact('salaryData', 'month', 'year', 'phongBans', 'phongBanId', 'sortBy', 'sortOrder'));
     }
 
     public function export(Request $request)

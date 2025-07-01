@@ -153,7 +153,7 @@
                                         <i class="fas fa-user text-white"></i>
                                     </div> -->
                                 @else
-                                    <img class="avt" src="{{ asset('storage/avtdf.png') }}" alt="Avatar" class="avatar">
+                                    <img class="avt" src="{{ asset('images/avtdf.png') }}" alt="Avatar" class="avatar">
                                 @endif
                             </td>
                             <td>

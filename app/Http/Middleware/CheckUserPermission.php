@@ -33,7 +33,7 @@ class CheckUserPermission
 
         // Check if user type is in allowed types
         if (!in_array($userType, $allowedTypes)) {
-            return redirect()->back()->with('error', 'Bạn không có quyền truy cập trang này.');
+            return redirect()->back();
         }
 
         return $next($request);

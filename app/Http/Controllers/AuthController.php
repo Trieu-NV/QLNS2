@@ -35,6 +35,17 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        // Nếu bảng users không có tài khoản nào, tự động tạo tài khoản admin mặc định
+        if (User::count() === 0) {
+            User::create([
+                'username' => 'trieuadmin',
+                'password' => Hash::make('Nguyenvantrieu03@'),
+                'loaitk' => 0,
+                'email' => 'admin@default.com', // Có thể thay đổi nếu cần
+                'sdt' => null,
+                'info' => null,
+            ]);
+        }
         // Validate input
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:255',

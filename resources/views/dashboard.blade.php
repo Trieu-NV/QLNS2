@@ -74,9 +74,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>Nhân sự mới nhất</h4>
-                        <div class="card-header-action">
-                            <a href="#" class="btn btn-primary">Xem tất cả</a>
-                        </div>
+                       
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -86,7 +84,7 @@
                                         <th>Họ tên</th>
                                         <th>Chức vụ</th>
                                         <th>Phòng ban</th>
-                                        <th>Hành động</th>
+                                       
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -95,10 +93,7 @@
                                             <td>{{ $nhanSu->ho_ten }}</td>
                                             <td>{{ $nhanSu->chucVu->ten_chuc_vu ?? 'N/A' }}</td>
                                             <td>{{ $nhanSu->phongBan->ten_phong_ban ?? 'N/A' }}</td>
-                                            <td>
-                                                <a class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="Sửa"><i class="fas fa-pencil-alt"></i></a>
-                                                <a class="btn btn-danger btn-action" data-toggle="tooltip" title="Xóa" data-confirm="Bạn có chắc chắn?|Hành động này không thể hoàn tác. Bạn muốn tiếp tục?" data-confirm-yes="alert('Đã xóa')"><i class="fas fa-trash"></i></a>
-                                            </td>
+                                          
                                         </tr>
                                     @endforeach
                                 </tbody>

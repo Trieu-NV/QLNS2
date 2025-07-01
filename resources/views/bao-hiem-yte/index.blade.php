@@ -46,9 +46,7 @@
             @endforeach
         </tbody>
     </table>
-    <div class="d-flex justify-content-center mt-3">
-        {{ $baoHiemYtes->links() }}
-    </div>
+   
     <!-- Single Delete Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1">
         <div class="modal-dialog">

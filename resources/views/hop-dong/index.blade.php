@@ -66,7 +66,7 @@
         <tbody>
             @foreach ($hopDongs as $index => $hopDong)
             <tr>
-                <td>{{ ($hopDongs->currentPage() - 1) * $hopDongs->perPage() + $index + 1 }}</td>
+                <td>{{ $index + 1 }}</td>
                 <td>{{ $hopDong->ma_nv }}</td>
                 <td>{{ $hopDong->nhanSu->ho_ten ?? 'N/A' }}</td>
                 <td>{{ $hopDong->loai_hop_dong_text }}</td>

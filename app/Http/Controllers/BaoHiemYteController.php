@@ -36,7 +36,7 @@ class BaoHiemYteController extends Controller
 
         $query->orderBy($sortBy, $sortOrder);
 
-        $baoHiemYtes = $query->paginate(10);
+        $baoHiemYtes = $query->get();
 
         return view('bao-hiem-yte.index', compact('baoHiemYtes'));
     }

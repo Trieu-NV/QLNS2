@@ -127,6 +127,7 @@
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
+                                <th style="width: 60px;">STT</th>
                                 <th style="width: 100px;">Mã NV</th>
                                 <th>Họ tên</th>
                                 <th class="text-center" style="width: 60px;">Ảnh</th>
@@ -141,9 +142,9 @@
                             </tr>
                         </thead>
                 <tbody>
-                    @forelse($nhanSu as $item)
+                    @forelse($nhanSu as $index => $item)
                         <tr>
-                            
+                            <td>{{ ($nhanSu->firstItem() ?? 0) + $index }}</td>
                             <td><strong>{{ $item->ma_nv }}</strong></td>
                             <td>{{ $item->ho_ten }}</td>
                             <td>

@@ -53,8 +53,7 @@ class HopDongController extends Controller
             ->when(!$sort || ($sort !== 'luong_asc' && $sort !== 'luong_desc'), function($query) {
                 $query->orderBy('created_at', 'desc');
             })
-            ->paginate(10)
-            ->appends($request->except('page'));
+            ->get();
 
         return view('hop-dong.index', compact('hopDongs'));
     }

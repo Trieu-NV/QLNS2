@@ -17,6 +17,11 @@ class HopDongController extends Controller
     public function index(Request $request)
     {
         $search = $request->get('search');
+        $loaiHopDong = $request->get('loai_hop_dong');
+        $ngayBatDau = $request->get('ngay_bat_dau');
+        $ngayKetThuc = $request->get('ngay_ket_thuc');
+        $trangThai = $request->get('trang_thai');
+        $sort = $request->get('sort');
         
         $hopDongs = HopDong::with('nhanSu')
             ->when($search, function($query) use ($search) {
@@ -25,8 +30,31 @@ class HopDongController extends Controller
                       ->orWhere('ma_nv', 'like', "%{$search}%");
                 });
             })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->when($loaiHopDong, function($query) use ($loaiHopDong) {
+                $query->where('loai_hop_dong', $loaiHopDong);
+            })
+            ->when($ngayBatDau, function($query) use ($ngayBatDau) {
+                $query->whereDate('ngay_bat_dau', '>=', $ngayBatDau);
+            })
+            ->when($ngayKetThuc, function($query) use ($ngayKetThuc) {
+                $query->whereDate('ngay_ket_thuc', '<=', $ngayKetThuc);
+            })
+            ->when($trangThai !== null && $trangThai !== '', function($query) use ($trangThai) {
+                $query->whereHas('nhanSu', function($q) use ($trangThai) {
+                    $q->where('trang_thai', $trangThai);
+                });
+            })
+            ->when($sort === 'luong_asc', function($query) {
+                $query->orderBy('luong', 'asc');
+            })
+            ->when($sort === 'luong_desc', function($query) {
+                $query->orderBy('luong', 'desc');
+            })
+            ->when(!$sort || ($sort !== 'luong_asc' && $sort !== 'luong_desc'), function($query) {
+                $query->orderBy('created_at', 'desc');
+            })
+            ->paginate(10)
+            ->appends($request->except('page'));
 
         return view('hop-dong.index', compact('hopDongs'));
     }

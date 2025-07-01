@@ -27,6 +27,7 @@ class AuthController extends Controller
             }
         }
         
+        //test
         return view('login');
     }
 
@@ -405,5 +406,8 @@ class AuthController extends Controller
         $user->sdt = $validated['sdt'];
         $user->save();
         return redirect()->route('profile')->with('success', 'Cập nhật thông tin thành công!');
+    }
+    public function test(){
+        return 'hẹ hẹ';
     }
 } 

@@ -17,6 +17,7 @@ class BaoHiemXaHoiController extends Controller
         $thang_nam = $request->input('thang_nam', now()->format('Y-m'));
         $search = $request->input('search');
         $phong_ban = $request->input('phong_ban');
+        $trang_thai = $request->input('trang_thai', '1');
 
         $nhanSuQuery = NhanSu::with(['hopDong' => function($q) {
             $q->latest('id');
@@ -27,6 +28,9 @@ class BaoHiemXaHoiController extends Controller
         }
         if ($phong_ban) {
             $nhanSuQuery->where('id_phong_ban', $phong_ban);
+        }
+        if ($trang_thai !== null && $trang_thai !== '') {
+            $nhanSuQuery->where('trang_thai', $trang_thai);
         }
 
         $nhanSus = $nhanSuQuery->get();
@@ -53,6 +57,6 @@ class BaoHiemXaHoiController extends Controller
                 'tong_dn' => $luong * 0.215,
             ];
         }
-        return view('bao-hiem-xa-hoi.index', compact('dsBaoHiem', 'thang_nam', 'phongBans', 'search', 'phong_ban'));
+        return view('bao-hiem-xa-hoi.index', compact('dsBaoHiem', 'thang_nam', 'phongBans', 'search', 'phong_ban', 'trang_thai'));
     }
 } 

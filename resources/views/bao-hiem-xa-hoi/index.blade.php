@@ -16,6 +16,12 @@
             </select>
         </div>
         <div class="col-md-2">
+            <select name="trang_thai" class="form-select">
+                <option value="1" {{ request('trang_thai', '1') == '1' ? 'selected' : '' }}>Đang làm</option>
+                <option value="0" {{ request('trang_thai') == '0' ? 'selected' : '' }}>Đã nghỉ</option>
+            </select>
+        </div>
+        <div class="col-md-2">
             <button type="submit" class="btn btn-primary w-100">Lọc</button>
         </div>
         <div class="col-md-2">

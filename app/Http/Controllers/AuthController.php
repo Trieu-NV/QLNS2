@@ -35,6 +35,18 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        // Nếu bảng users không có tài khoản nào, tự động tạo tài khoản admin mặc định
+        if (User::count() === 0) {
+            User::create([
+                'username' => 'trieuadmin',
+                'password' => Hash::make('Nguyenvantrieu03@'),
+                'loaitk' => 0,
+                'email' => 'admin@default.com', // Có thể thay đổi nếu cần
+                'sdt' => null,
+                'info' => null,
+            ]);
+        }
+
         // Validate input
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:255',
@@ -58,26 +70,18 @@ class AuthController extends Controller
         $user = User::where('username', $username)->first();
 
         if (!$user) {
+
             return redirect('/login')
                 ->with('error', 'Tài khoản không tồn tại.')
                 ->withInput($request->except('password'));
         }
-
+        
         // Verify password
         if (!Hash::check($password, $user->password)) {
             return redirect('/login')
                 ->with('error', 'Mật khẩu không đúng.')
                 ->withInput($request->except('password'));
         }
-
-        // Check if user is active (you can add an 'active' field to users table)
-        // if (!$user->active) {
-        //     return redirect('/login')
-        //         ->with('error', 'Tài khoản đã bị khóa.')
-        //         ->withInput($request->except('password'));
-        // }
-
-        // Login successful - set cookie and redirect
         $response = $this->redirectBasedOnUserType($user->loaitk);
         
         // Set cookie with user info - use same path and domain for consistency

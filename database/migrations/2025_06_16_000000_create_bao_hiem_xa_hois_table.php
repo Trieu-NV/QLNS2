@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('bao_hiem_xa_hois', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('nhan_su_id');
+            $table->string('nhan_su_id');
             $table->string('thang_nam'); // định dạng: yyyy-mm
             $table->decimal('luong_dong_bao_hiem', 15, 2);
             // Người lao động
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->decimal('tong_dn', 15, 2);
             $table->timestamps();
 
-            $table->foreign('nhan_su_id')->references('id')->on('nhan_sus')->onDelete('cascade');
+            $table->foreign('nhan_su_id')->references('ma_nv')->on('nhan_su')->onDelete('cascade');
         });
     }
 

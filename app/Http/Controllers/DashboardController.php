@@ -46,13 +46,24 @@ class DashboardController extends Controller
         ];
         $now = now();
         foreach (NhanSu::all() as $ns) {
-            if (!$ns->ngay_sinh) continue;
-            $age = $now->diffInYears($ns->ngay_sinh);
-            if ($age < 25) $ageStats['Dưới 25']++;
-            elseif ($age < 35) $ageStats['25-34']++;
-            elseif ($age < 45) $ageStats['35-44']++;
-            elseif ($age < 55) $ageStats['45-54']++;
-            else $ageStats['55+']++;
+            if (empty($ns->ngay_sinh)) continue;
+            try {
+                $dob = \Carbon\Carbon::parse($ns->ngay_sinh);
+            } catch (\Exception $e) {
+                continue; // Bỏ qua nếu ngày sinh không hợp lệ
+            }
+            $age = $dob->diffInYears($now);
+            if ($age < 25) {
+                $ageStats['Dưới 25']++;
+            } elseif ($age >= 25 && $age <= 34) {
+                $ageStats['25-34']++;
+            } elseif ($age >= 35 && $age <= 44) {
+                $ageStats['35-44']++;
+            } elseif ($age >= 45 && $age <= 54) {
+                $ageStats['45-54']++;
+            } else {
+                $ageStats['55+']++;
+            }
         }
 
         // Lương trung bình theo phòng ban
